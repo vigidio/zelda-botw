@@ -6,7 +6,9 @@ namespace Inventory.Domain.Models.AggregateRoot
 
     public abstract class AggregateRoot : IAggregateRoot, IAggregateChanges
     {
-        public string InventoryIdentifier { get; set; }
+        public string InventoryIdentifier { get; protected set; }
+
+        public Guid NintendoUserId { get; protected set; }
 
         public int MajorVersion { get; protected set; } = 0;
 
@@ -24,8 +26,6 @@ namespace Inventory.Domain.Models.AggregateRoot
 
         public virtual void MarkChangesAsCommitted()
         {
-            this.MajorVersion += 1;
-
             this.recentChanges = new List<Event>(this.changes);
 
             this.changes.Clear();

@@ -1,4 +1,4 @@
-namespace Inventory.IntegrationTests.Infra
+namespace Inventory.IntegrationTests.Infra.Repositories
 {
     using System;
     using System.Threading.Tasks;
@@ -13,7 +13,8 @@ namespace Inventory.IntegrationTests.Infra
     using Moq;
     using Xunit;
 
-    public class NewGameRepositoryTests
+    [Collection("Sequential")]
+    public class NewGameTests
     {
         private static readonly Guid NintendoUserId = Guid.NewGuid();
 
@@ -21,7 +22,7 @@ namespace Inventory.IntegrationTests.Infra
 
         private readonly IInventoryRepository repository;
 
-        public NewGameRepositoryTests()
+        public NewGameTests()
         {
             var builder = new WebHostBuilder()
                 .UseEnvironment("IntegrationTest")

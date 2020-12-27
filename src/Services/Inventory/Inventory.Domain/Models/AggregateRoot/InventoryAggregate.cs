@@ -22,8 +22,9 @@ namespace Inventory.Domain.Models.AggregateRoot
             ISingleSlot<Shield> shieldSlot = null,
             IStackSlot<Material> materialSlot = null)
         {
+            this.NintendoUserId = nintendoUserId;
             this.MajorVersion = version;
-            this.InventoryIdentifier = $"{nintendoUserId}-{this.MajorVersion}";
+            this.InventoryIdentifier = $"{this.NintendoUserId}-{this.MajorVersion}";
             this.WeaponSlot = weaponSlot ?? new WeaponSlot(null);
             this.ShieldSlot = shieldSlot ?? new ShieldSlot(null);
             this.MaterialSlot = materialSlot ?? new MaterialSlot(null);
@@ -69,6 +70,8 @@ namespace Inventory.Domain.Models.AggregateRoot
         public void Save()
         {
             this.ApplyEvent(new GameSaved(this.InventoryIdentifier, this.MajorVersion));
+            this.MajorVersion += 1;
+            this.InventoryIdentifier = $"{this.NintendoUserId}-{this.MajorVersion}";
         }
 
         private MaterialAdded CreateMaterialAddedEvent(Material material)

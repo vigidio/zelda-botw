@@ -21,15 +21,18 @@ namespace Inventory.Infra.Repositories
         /// </summary>
         public InventoryRepository(RepositoryConfiguration configuration)
         {
-            BsonClassMap.RegisterClassMap<AggregateRoot>(cm =>
+            if (!BsonClassMap.IsClassMapRegistered(typeof(AggregateRoot)))
             {
-                cm.AutoMap();
-                cm.MapIdProperty(c => c.InventoryIdentifier);
-            });
+                BsonClassMap.RegisterClassMap<AggregateRoot>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.MapIdProperty(c => c.InventoryIdentifier);
+                });
 
-            BsonSerializer.RegisterSerializer(
-                new ImpliedImplementationInterfaceSerializer<IAggregateRoot, InventoryAggregate>(
-                    BsonSerializer.LookupSerializer<InventoryAggregate>()));
+                BsonSerializer.RegisterSerializer(
+                    new ImpliedImplementationInterfaceSerializer<IAggregateRoot, InventoryAggregate>(
+                        BsonSerializer.LookupSerializer<InventoryAggregate>()));
+            }
 
             var client = new MongoClient(configuration.Mongo.ConnectionString);
             var database = client.GetDatabase("botw");

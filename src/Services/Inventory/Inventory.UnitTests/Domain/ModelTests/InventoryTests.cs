@@ -89,7 +89,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         }
 
         [Fact]
-        public void GivenAListOfChanges_WhenMarkChangesAsCommitted_ThenAMajorVersionShouldBeIncremented()
+        public void GivenAListOfChanges_WhenSave_ThenAMajorVersionShouldBeIncremented()
         {
             // Arrange
             var inventory = AggregateFactory.StartNew(Guid.NewGuid());
@@ -99,7 +99,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             var initialMajorVersion = inventory.MajorVersion;
 
             // Act
-            inventory.MarkChangesAsCommitted();
+            inventory.Save();
 
             // Assert
             inventory.MajorVersion.Should().Be(initialMajorVersion + 1);

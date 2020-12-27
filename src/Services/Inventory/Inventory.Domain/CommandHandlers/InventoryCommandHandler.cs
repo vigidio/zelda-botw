@@ -93,7 +93,7 @@ namespace Inventory.Domain.CommandHandlers
 
         public async Task<IAggregateChanges> Handle(SaveCommand message)
         {
-            string inventoryIdentifier = $"{message.NintendoUserId}-{message.CurrentVersion}";
+            var inventoryIdentifier = $"{message.NintendoUserId}-{message.CurrentVersion}";
 
             var inventory = await this.eventStoreRepository.GetByIdAsync(inventoryIdentifier);
 
