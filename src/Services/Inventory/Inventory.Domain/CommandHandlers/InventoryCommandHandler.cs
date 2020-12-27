@@ -1,5 +1,6 @@
 namespace Inventory.Domain.CommandHandlers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Inventory.Domain.Commands;
@@ -25,9 +26,9 @@ namespace Inventory.Domain.CommandHandlers
             IInventoryRepository eventStoreRepository,
             IDispatcherEvent dispatcherEvent)
         {
-            this.itemRepository = itemRepository;
-            this.eventStoreRepository = eventStoreRepository;
-            this.dispatcherEvent = dispatcherEvent;
+            this.itemRepository = itemRepository ?? throw new ArgumentNullException($"{nameof(itemRepository)} cannot be null");
+            this.eventStoreRepository = eventStoreRepository ?? throw new ArgumentNullException($"{nameof(eventStoreRepository)} cannot be null");
+            this.dispatcherEvent = dispatcherEvent ?? throw new ArgumentNullException($"{nameof(dispatcherEvent)} cannot be null");
         }
 
         public async Task<IAggregateChanges> Handle(NewGameCommand message)
