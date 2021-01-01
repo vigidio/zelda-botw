@@ -24,7 +24,6 @@ namespace Inventory.Domain.Models.AggregateRoot
         {
             this.NintendoUserId = nintendoUserId;
             this.MajorVersion = version;
-            this.InventoryIdentifier = $"{this.NintendoUserId}-{this.MajorVersion}";
             this.WeaponSlot = weaponSlot ?? new WeaponSlot(null);
             this.ShieldSlot = shieldSlot ?? new ShieldSlot(null);
             this.MaterialSlot = materialSlot ?? new MaterialSlot(null);
@@ -46,7 +45,7 @@ namespace Inventory.Domain.Models.AggregateRoot
                     break;
                 case Shield shield:
                     this.ShieldSlot.Add(shield);
-                    this.ApplyEvent(new ShieldAdded(this.InventoryIdentifier, this.MajorVersion));
+                    this.ApplyEvent(new ShieldAdded(this.NintendoUserId, this.MajorVersion));
                     break;
                 case Material material:
                     this.MaterialSlot.Add(material);
@@ -62,22 +61,21 @@ namespace Inventory.Domain.Models.AggregateRoot
                 case Material material:
                     this.MaterialSlot.Remove(material.Id);
                     this.ApplyEvent(new MaterialRemoved(
-                        this.InventoryIdentifier, this.MajorVersion, material.Id));
+                        this.NintendoUserId, this.MajorVersion, material.Id));
                     break;
             }
         }
 
         public void Save()
         {
-            this.ApplyEvent(new GameSaved(this.InventoryIdentifier, this.MajorVersion));
+            this.ApplyEvent(new GameSaved(this.NintendoUserId, this.MajorVersion));
             this.MajorVersion += 1;
-            this.InventoryIdentifier = $"{this.NintendoUserId}-{this.MajorVersion}";
         }
 
         private MaterialAdded CreateMaterialAddedEvent(Material material)
         {
             return new MaterialAdded(
-                this.InventoryIdentifier,
+                this.NintendoUserId,
                 this.MajorVersion,
                 material.Id,
                 material.Name,
@@ -90,7 +88,7 @@ namespace Inventory.Domain.Models.AggregateRoot
         private WeaponAdded CreateWeaponAddedEvent(Weapon weapon)
         {
             return new WeaponAdded(
-                this.InventoryIdentifier,
+                this.NintendoUserId,
                 this.MajorVersion,
                 weapon.Id,
                 weapon.Name,
@@ -113,13 +111,13 @@ namespace Inventory.Domain.Models.AggregateRoot
 
         private void When(InventoryCreated e)
         {
-            this.InventoryIdentifier = e.InventoryIdentifier;
+            this.NintendoUserId = e.NintendoUserId;
             this.MajorVersion = e.MajorVersion;
         }
 
         private void When(GameSaved e)
         {
-            this.InventoryIdentifier = e.InventoryIdentifier;
+            this.NintendoUserId = e.NintendoUserId;
             this.MajorVersion = e.MajorVersion;
         }
 

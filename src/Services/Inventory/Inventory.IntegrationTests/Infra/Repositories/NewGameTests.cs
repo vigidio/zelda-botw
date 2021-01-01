@@ -48,7 +48,7 @@ namespace Inventory.IntegrationTests.Infra.Repositories
             await this.commandHandler.Handle(newGameCommand);
 
             // Assert
-            (await this.repository.GetByIdAsync($"{newGameCommand.NintendoUserId}-0")).Should().NotBeNull();
+            (await this.repository.GetByIdAsync(newGameCommand.NintendoUserId, 0)).Should().NotBeNull();
         }
     }
 }

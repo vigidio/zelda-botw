@@ -5,11 +5,6 @@ namespace Inventory.Domain.Exceptions
 
     public class InvalidInventoryException : Exception
     {
-        public InvalidInventoryException(string inventoryIdentifier)
-        {
-            Trace.WriteLine($"Invalid Inventory: {inventoryIdentifier}");
-        }
-
         public InvalidInventoryException(Guid nintendoUserId, int version)
         {
             Trace.WriteLine($"Invalid Inventory for this user {nintendoUserId} and version {version}");

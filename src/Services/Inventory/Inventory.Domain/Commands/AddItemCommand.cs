@@ -5,13 +5,16 @@ namespace Inventory.Domain.Commands
 
     public class AddItemCommand : InventoryCommand
     {
-        public AddItemCommand(string inventoryIdentifier, Guid itemId, ItemType itemType)
+        public AddItemCommand(Guid nintendoUserId, int version, Guid itemId, ItemType itemType)
         {
-            this.InventoryIdentifier = inventoryIdentifier;
+            this.NintendoUserId = nintendoUserId;
+            this.Version = version;
             this.ItemId = itemId;
         }
 
-        public string InventoryIdentifier { get; }
+        public Guid NintendoUserId { get; }
+
+        public int Version { get; }
 
         public Guid ItemId { get; }
     }

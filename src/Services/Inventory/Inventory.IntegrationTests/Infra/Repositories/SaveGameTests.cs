@@ -53,14 +53,15 @@ namespace Inventory.IntegrationTests.Infra.Repositories
             
             await this.commandHandler.Handle(newGameCommand);
             
-            var newGameSaved = await this.repository.GetByIdAsync($"{newGameCommand.NintendoUserId}-0");
+            var newGameSaved = await this.repository.GetByIdAsync(newGameCommand.NintendoUserId, 0);
 
             this.itemRepositoryMock
                 .Setup(o => o.GetByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(this.fixture.Create<Material>());
 
             await this.commandHandler.Handle(new AddItemCommand(
-                newGameSaved.InventoryIdentifier, 
+                newGameSaved.NintendoUserId,
+                0,
                 Guid.NewGuid(), 
                 ItemType.Material));
 
@@ -71,7 +72,7 @@ namespace Inventory.IntegrationTests.Infra.Repositories
             await this.commandHandler.Handle(new SaveCommand(NintendoUserId, newGameSaved.MajorVersion));
 
             // Assert
-            (await this.repository.GetByIdAsync($"{NintendoUserId}-1")).MajorVersion.Should().Be(1);
+            (await this.repository.GetByIdAsync(NintendoUserId, 1)).MajorVersion.Should().Be(1);
         }
     }
 }

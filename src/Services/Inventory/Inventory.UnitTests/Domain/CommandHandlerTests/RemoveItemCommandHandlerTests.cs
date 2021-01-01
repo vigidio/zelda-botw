@@ -51,11 +51,9 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenRemoveItemCommand_WhenInvalidItem_ThenShouldThrowInvalidItemException()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var itemId = Guid.NewGuid();
             var itemType = ItemType.Material;
-            var removeItemCommand = new RemoveItemCommand(inventoryIdentifier, itemId, itemType);
+            var removeItemCommand = new RemoveItemCommand(NintendoUserId, InitialMajorVersion, itemId, itemType);
 
             this.itemRepository
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
@@ -72,18 +70,16 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenRemoveItemCommand_WhenInvalidInventory_ThenShouldThrowInvalidInventoryException()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var itemId = Guid.NewGuid();
             var itemType = ItemType.Material;
-            var removeItemCommand = new RemoveItemCommand(inventoryIdentifier, itemId, itemType);
+            var removeItemCommand = new RemoveItemCommand(NintendoUserId, InitialMajorVersion, itemId, itemType);
 
             this.itemRepository
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
                 .ReturnsAsync(this.fixture.Create<Material>());
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync((IInventory)null);
 
             // Act & Assert
@@ -97,13 +93,11 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenRemoveItemCommand_WhenValidItem_ThenShouldRemoveFromInventory()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var initialMaterials = this.fixture.CreateMany<Material>(160).ToList();
 
             var itemId = initialMaterials.First().Id;
             var itemType = ItemType.Material;
-            var removeItemCommand = new RemoveItemCommand(inventoryIdentifier, itemId, itemType);
+            var removeItemCommand = new RemoveItemCommand(NintendoUserId, InitialMajorVersion, itemId, itemType);
 
             this.itemRepository
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
@@ -114,7 +108,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
                 .Build();
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync(fakeLoadedInventory);
 
             this.eventStoreRepository

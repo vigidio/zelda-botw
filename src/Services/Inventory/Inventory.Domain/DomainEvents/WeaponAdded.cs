@@ -7,7 +7,7 @@ namespace Inventory.Domain.DomainEvents
     public class WeaponAdded : Event
     {
         public WeaponAdded(
-            string inventoryIdentifier,
+            Guid nintendoUserId,
             int currentVersion,
             Guid itemId,
             string name,
@@ -17,7 +17,7 @@ namespace Inventory.Domain.DomainEvents
             string material,
             string archetype,
             string hands)
-            : base(inventoryIdentifier, currentVersion)
+            : base(nintendoUserId, currentVersion)
         {
             this.ItemId = itemId;
             this.Name = name;

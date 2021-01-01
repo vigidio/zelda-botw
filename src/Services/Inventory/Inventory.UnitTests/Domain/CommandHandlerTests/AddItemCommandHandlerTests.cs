@@ -50,10 +50,8 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenAddItemCommand_WhenInvalidItem_ThenShouldThrowInvalidItemException()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var itemId = Guid.NewGuid();
-            var addItemCommand = new AddItemCommand(inventoryIdentifier, itemId, ItemType.Weapon);
+            var addItemCommand = new AddItemCommand(NintendoUserId, InitialMajorVersion, itemId, ItemType.Weapon);
 
             this.itemRepository
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
@@ -70,17 +68,15 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenAddItemCommand_WhenInvalidInventory_ThenShouldThrowInvalidInventoryException()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var itemId = Guid.NewGuid();
-            var addItemCommand = new AddItemCommand(inventoryIdentifier, itemId, ItemType.Weapon);
+            var addItemCommand = new AddItemCommand(NintendoUserId, InitialMajorVersion, itemId, ItemType.Weapon);
 
             this.itemRepository
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
                 .ReturnsAsync(this.fixture.Create<Weapon>());
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync((IInventory)null);
 
             // Act & Assert
@@ -94,17 +90,15 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenAddItemCommand_WhenValidItem_ThenShouldAddToInventory()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var itemId = Guid.NewGuid();
-            var addItemCommand = new AddItemCommand(inventoryIdentifier, itemId, ItemType.Weapon);
+            var addItemCommand = new AddItemCommand(NintendoUserId, InitialMajorVersion, itemId, ItemType.Weapon);
 
             this.itemRepository
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
                 .ReturnsAsync(this.fixture.Create<Weapon>());
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync(AggregateFactory.StartNew(NintendoUserId));
 
             this.eventStoreRepository

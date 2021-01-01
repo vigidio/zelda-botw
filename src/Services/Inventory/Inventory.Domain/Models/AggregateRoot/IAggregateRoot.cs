@@ -1,9 +1,13 @@
 namespace Inventory.Domain.Models.AggregateRoot
 {
+    using System;
+
     public interface IAggregateRoot
     {
-        public string InventoryIdentifier { get; }
+        public Guid NintendoUserId { get; }
 
+        public int MajorVersion { get; }
+        
         public int EventVersion { get; }
     }
 }

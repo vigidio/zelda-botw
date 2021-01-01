@@ -59,7 +59,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
                 .Build();
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync(fakeInventory);
 
             // Act
@@ -73,12 +73,10 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenSaveCommand_WhenInvalidInventory_ThenShouldThrowInvalidInventoryException()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync((IInventory)null);
 
             // Act && Assert
@@ -89,15 +87,13 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenSaveCommand_WhenReceiveCommand_ThenGameSavedEventShouldOccur()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
 
             var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
                 .Build();
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync(fakeInventory);
 
             // Act
@@ -111,12 +107,10 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenSaveCommand_WhenSave_ThenShouldNotHaveUncommittedChanges()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
 
             var itemId = Guid.NewGuid();
-            var addItemCommand = new AddItemCommand(inventoryIdentifier, itemId, ItemType.Weapon);
+            var addItemCommand = new AddItemCommand(NintendoUserId, InitialMajorVersion, itemId, ItemType.Weapon);
 
             this.itemRepository
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
@@ -126,7 +120,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
                 .Build();
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync(fakeInventory);
 
             var resultChangesAddedOneItem = await this.commandHandler.Handle(addItemCommand);
@@ -148,12 +142,10 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenSaveCommand_WhenSave_ThenVersionOfCommittedChangesShouldBeOrdered()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
 
             var itemId = Guid.NewGuid();
-            var addItemCommand = new AddItemCommand(inventoryIdentifier, itemId, ItemType.Weapon);
+            var addItemCommand = new AddItemCommand(NintendoUserId, InitialMajorVersion, itemId, ItemType.Weapon);
 
             this.itemRepository
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
@@ -163,7 +155,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
                 .Build();
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync(fakeInventory);
 
             await this.commandHandler.Handle(addItemCommand);
@@ -192,15 +184,13 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
         public async Task GivenSaveCommand_WhenSave_ThenMajorVersionShouldBeIncremented()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
 
             var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
                 .Build();
 
             this.eventStoreRepository
-                .Setup(o => o.GetByIdAsync(inventoryIdentifier))
+                .Setup(o => o.GetByIdAsync(NintendoUserId, InitialMajorVersion))
                 .ReturnsAsync(fakeInventory);
 
             // Assert

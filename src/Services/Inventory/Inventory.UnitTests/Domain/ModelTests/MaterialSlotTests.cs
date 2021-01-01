@@ -162,12 +162,13 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 .Build();
 
             this.inventoryRepositoryMock
-                .Setup(o => o.GetByIdAsync(It.IsAny<string>()))
+                .Setup(o => o.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<int>()))
                 .ReturnsAsync(fakeLoadedInventory);
 
             var material = this.fixture.Create<Material>();
 
-            var inventory = await this.inventoryRepositoryMock.Object.GetByIdAsync(this.fixture.Create<string>());
+            var inventory = await this.inventoryRepositoryMock.Object.GetByIdAsync(
+                this.fixture.Create<Guid>(), this.fixture.Create<int>());
 
             // Assert
             inventory.MaterialSlot.SlotBag.Should().HaveCount(160);
@@ -250,7 +251,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             inventory.GetUncommitted().Last().Version.Should().Be(0);
             inventory.GetUncommitted().Last().Should().BeOfType<MaterialRemoved>();
             var materialRemoved = inventory.GetUncommitted().Last() as MaterialRemoved;
-            materialRemoved!.InventoryIdentifier.Should().Be(inventory.InventoryIdentifier);
+            materialRemoved!.NintendoUserId.Should().Be(inventory.NintendoUserId);
             materialRemoved!.MajorVersion.Should().Be(inventory.MajorVersion);
             materialRemoved!.ItemId.Should().Be(materialToRemove.Id);
         }

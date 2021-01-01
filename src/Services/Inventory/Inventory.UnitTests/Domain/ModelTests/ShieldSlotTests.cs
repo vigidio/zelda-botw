@@ -74,12 +74,13 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 .Build();
 
             this.inventoryRepositoryMock
-                .Setup(o => o.GetByIdAsync(It.IsAny<string>()))
+                .Setup(o => o.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<int>()))
                 .ReturnsAsync(fakeLoadedInventory);
 
             var shield = this.fixture.Create<Shield>();
 
-            var inventory = await this.inventoryRepositoryMock.Object.GetByIdAsync(this.fixture.Create<string>());
+            var inventory = await this.inventoryRepositoryMock.Object.GetByIdAsync(
+                this.fixture.Create<Guid>(), this.fixture.Create<int>());
 
             // Assert
             inventory.ShieldSlot.SlotBag.Should().HaveCount(4);

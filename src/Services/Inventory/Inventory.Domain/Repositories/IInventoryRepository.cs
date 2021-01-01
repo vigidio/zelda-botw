@@ -7,5 +7,7 @@ namespace Inventory.Domain.Repositories
     public interface IInventoryRepository : IAggregateRepository<IInventory>, IRepository<IInventory>
     {
         Task DeleteAsync(Guid nintendoUserId);
+        
+        Task<IInventory> GetByIdAsync(Guid id, int version);
     }
 }

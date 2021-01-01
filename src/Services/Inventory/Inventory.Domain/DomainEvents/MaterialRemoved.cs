@@ -6,8 +6,8 @@ namespace Inventory.Domain.DomainEvents
     [DataContract]
     public class MaterialRemoved : Event
     {
-        public MaterialRemoved(string inventoryIdentifier, int currentMajorVersion, Guid itemId)
-            : base(inventoryIdentifier, currentMajorVersion)
+        public MaterialRemoved(Guid nintendoUserId, int currentMajorVersion, Guid itemId)
+            : base(nintendoUserId, currentMajorVersion)
         {
             this.ItemId = itemId;
         }

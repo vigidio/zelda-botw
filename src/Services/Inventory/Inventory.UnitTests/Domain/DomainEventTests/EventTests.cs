@@ -21,11 +21,10 @@ namespace Inventory.UnitTests.Domain.DomainEventTests
             var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
 
             // Act
-            var gameSaved = new GameSaved(inventoryIdentifier, InitialMajorVersion);
+            var gameSaved = new GameSaved(NintendoUserId, InitialMajorVersion);
 
             // Assert
-            gameSaved.InventoryIdentifier.Should().NotBeEmpty();
-            gameSaved.InventoryIdentifier.Should().Be($"{NintendoUserId}-{InitialMajorVersion}");
+            gameSaved.NintendoUserId.Should().Be(NintendoUserId);
             gameSaved.MajorVersion.Should().Be(InitialMajorVersion);
         }
 
@@ -33,21 +32,18 @@ namespace Inventory.UnitTests.Domain.DomainEventTests
         public void GivenInventoryCreatedEvent_ThenIdShouldNotBeEmpty()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
 
             // Act
-            var inventoryCreated = new InventoryCreated(inventoryIdentifier);
+            var inventoryCreated = new InventoryCreated(NintendoUserId);
 
             // Assert
-            inventoryCreated.InventoryIdentifier.Should().NotBeEmpty();
+            inventoryCreated.NintendoUserId.Should().NotBeEmpty();
         }
 
         [Fact]
         public void GivenWeaponAddedEvent_ThenAllPropertiesShouldBePassed()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var weapon = new Weapon(
                 null,
                 "Master Sword",
@@ -59,14 +55,15 @@ namespace Inventory.UnitTests.Domain.DomainEventTests
                 "One-handed");
 
             // Act
-            var inventoryItemAdded = new WeaponAdded(inventoryIdentifier, InitialMajorVersion, weapon.Id, weapon.Name,
+            var inventoryItemAdded = new WeaponAdded(NintendoUserId, InitialMajorVersion, weapon.Id, weapon.Name,
                 weapon.Description, weapon.Strength, weapon.Durability, weapon.Material, weapon.Archetype,
                 weapon.Hands);
 
             // Assert
             inventoryItemAdded.Should().BeEquivalentTo(weapon, options =>
                 options.Excluding(o => o.Id));
-            inventoryItemAdded.InventoryIdentifier.Should().Be(inventoryIdentifier);
+            inventoryItemAdded.NintendoUserId.Should().Be(NintendoUserId);
+            inventoryItemAdded.Version.Should().Be(InitialMajorVersion);
             inventoryItemAdded.ItemId.Should().Be(weapon.Id);
         }
 
@@ -74,8 +71,6 @@ namespace Inventory.UnitTests.Domain.DomainEventTests
         public void GivenMaterialAddedEvent_ThenAllPropertiesShouldBePassed()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var material = new Material(
                 null,
                 "Apple",
@@ -85,7 +80,7 @@ namespace Inventory.UnitTests.Domain.DomainEventTests
                 MaterialType.Hearty);
 
             // Act
-            var inventoryMaterialAdded = new MaterialAdded(inventoryIdentifier, InitialMajorVersion, material.Id,
+            var inventoryMaterialAdded = new MaterialAdded(NintendoUserId, InitialMajorVersion, material.Id,
                 material.Name, material.Description, material.HP, material.Time, material.Type.ToString());
 
             // Assert
@@ -93,7 +88,7 @@ namespace Inventory.UnitTests.Domain.DomainEventTests
                 options
                     .Excluding(o => o.Id)
                     .Excluding(o => o.Type));
-            inventoryMaterialAdded.InventoryIdentifier.Should().Be(inventoryIdentifier);
+            inventoryMaterialAdded.NintendoUserId.Should().Be(NintendoUserId);
             inventoryMaterialAdded.ItemId.Should().Be(material.Id);
             inventoryMaterialAdded.Type.Should().Be(material.Type.ToString());
         }
@@ -102,15 +97,13 @@ namespace Inventory.UnitTests.Domain.DomainEventTests
         public void GivenMaterialRemovedEvent_ThenAllPropertiesShouldBePassed()
         {
             // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
             var materialId = Guid.NewGuid();
 
             // Act
-            var inventoryMaterialRemoved = new MaterialRemoved(inventoryIdentifier, InitialMajorVersion, materialId);
+            var inventoryMaterialRemoved = new MaterialRemoved(NintendoUserId, InitialMajorVersion, materialId);
 
             // Arrange
-            inventoryMaterialRemoved.InventoryIdentifier.Should().Be(inventoryIdentifier);
+            inventoryMaterialRemoved.NintendoUserId.Should().Be(NintendoUserId);
             inventoryMaterialRemoved.ItemId.Should().Be(materialId);
         }
     }

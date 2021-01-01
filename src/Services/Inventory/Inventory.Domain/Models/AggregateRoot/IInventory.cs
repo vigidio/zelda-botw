@@ -3,7 +3,7 @@ namespace Inventory.Domain.Models.AggregateRoot
     using Inventory.Domain.Models.Entity;
     using Inventory.Domain.Models.Entity.Slot;
 
-    public interface IInventory : IAggregateRoot, IAggregateChanges
+    public interface IInventory : IAggregateChanges
     {
         ISingleSlot<Weapon> WeaponSlot { get; }
 

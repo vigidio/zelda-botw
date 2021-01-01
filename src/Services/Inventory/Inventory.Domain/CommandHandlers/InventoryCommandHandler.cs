@@ -53,11 +53,11 @@ namespace Inventory.Domain.CommandHandlers
                 throw new InvalidItemException(message.ItemId);
             }
 
-            var inventory = await this.eventStoreRepository.GetByIdAsync(message.InventoryIdentifier);
+            var inventory = await this.eventStoreRepository.GetByIdAsync(message.NintendoUserId, message.Version);
 
             if (inventory == null)
             {
-                throw new InvalidInventoryException(message.InventoryIdentifier);
+                throw new InvalidInventoryException(message.NintendoUserId, message.Version);
             }
 
             inventory.AddItem(item);
@@ -77,11 +77,11 @@ namespace Inventory.Domain.CommandHandlers
                 throw new InvalidItemException(message.ItemId);
             }
 
-            var inventory = await this.eventStoreRepository.GetByIdAsync(message.InventoryIdentifier);
+            var inventory = await this.eventStoreRepository.GetByIdAsync(message.NintendoUserId, message.Version);
 
             if (inventory == null)
             {
-                throw new InvalidInventoryException(message.InventoryIdentifier);
+                throw new InvalidInventoryException(message.NintendoUserId, message.Version);
             }
 
             inventory.RemoveItem(item);
@@ -93,9 +93,7 @@ namespace Inventory.Domain.CommandHandlers
 
         public async Task<IAggregateChanges> Handle(SaveCommand message)
         {
-            var inventoryIdentifier = $"{message.NintendoUserId}-{message.CurrentVersion}";
-
-            var inventory = await this.eventStoreRepository.GetByIdAsync(inventoryIdentifier);
+            var inventory = await this.eventStoreRepository.GetByIdAsync(message.NintendoUserId, message.CurrentVersion);
 
             if (inventory == null)
             {

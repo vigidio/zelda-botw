@@ -4,12 +4,8 @@ namespace Inventory.Domain.Models.AggregateRoot
     using System.Collections.Generic;
     using Inventory.Domain.DomainEvents;
 
-    public interface IAggregateChanges
+    public interface IAggregateChanges : IAggregateRoot
     {
-        Guid NintendoUserId { get; }
-        
-        int MajorVersion { get; }
-
         IEnumerable<Event> GetUncommitted();
 
         IEnumerable<Event> GetLastCommitted();

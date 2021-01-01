@@ -73,7 +73,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             inventory.GetUncommitted().Last().Version.Should().Be(1);
             inventory.GetUncommitted().Last().Should().BeOfType<WeaponAdded>();
             var weaponAdded = inventory.GetUncommitted().Last() as WeaponAdded;
-            weaponAdded!.InventoryIdentifier.Should().Be(inventory.InventoryIdentifier);
+            weaponAdded!.NintendoUserId.Should().Be(inventory.NintendoUserId);
             weaponAdded!.MajorVersion.Should().Be(inventory.MajorVersion);
             weaponAdded!.ItemId.Should().Be(weapon.Id);
             weaponAdded.Should().BeEquivalentTo(weapon, cfg => cfg.Excluding(o => o.Id));
@@ -90,12 +90,15 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 .Build();
 
             this.inventoryRepositoryMock
-                .Setup(o => o.GetByIdAsync(It.IsAny<string>()))
+                .Setup(o => o.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<int>()))
                 .ReturnsAsync(fakeLoadedInventory);
 
             var weapon = this.fixture.Create<Weapon>();
 
-            var inventory = await this.inventoryRepositoryMock.Object.GetByIdAsync(this.fixture.Create<string>());
+            var inventory =
+                await this.inventoryRepositoryMock.Object.GetByIdAsync(
+                    this.fixture.Create<Guid>(),
+                    this.fixture.Create<int>());
 
             // Assert
             inventory.WeaponSlot.SlotBag.Should().HaveCount(8);

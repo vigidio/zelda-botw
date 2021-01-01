@@ -6,8 +6,6 @@ namespace Inventory.Domain.Models.AggregateRoot
 
     public abstract class AggregateRoot : IAggregateRoot, IAggregateChanges
     {
-        public string InventoryIdentifier { get; protected set; }
-
         public Guid NintendoUserId { get; protected set; }
 
         public int MajorVersion { get; protected set; } = 0;

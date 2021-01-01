@@ -14,7 +14,7 @@ namespace Inventory.Domain.Models.AggregateRoot
         {
             var newInventory = new InventoryAggregate(nintendoUserId, InitialVersion);
 
-            newInventory.ApplyEvent(new InventoryCreated(newInventory.InventoryIdentifier));
+            newInventory.ApplyEvent(new InventoryCreated(newInventory.NintendoUserId));
 
             return newInventory;
         }

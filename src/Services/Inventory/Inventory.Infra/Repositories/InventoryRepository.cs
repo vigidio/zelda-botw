@@ -19,14 +19,15 @@ namespace Inventory.Infra.Repositories
         /// <summary>
         ///     Initializes a new instance of the <see cref="InventoryRepository" /> class.
         /// </summary>
-        public InventoryRepository(RepositoryConfiguration configuration)
+        public InventoryRepository(IRepositoryConfiguration configuration)
         {
             if (!BsonClassMap.IsClassMapRegistered(typeof(AggregateRoot)))
             {
                 BsonClassMap.RegisterClassMap<AggregateRoot>(cm =>
                 {
                     cm.AutoMap();
-                    cm.MapIdProperty(c => c.InventoryIdentifier);
+                    cm.MapIdProperty(c => c.NintendoUserId);
+                    cm.MapIdProperty(c => c.MajorVersion);
                 });
 
                 BsonSerializer.RegisterSerializer(
@@ -44,10 +45,10 @@ namespace Inventory.Infra.Repositories
             return inventoryCollection.InsertOneAsync(aggregate);
         }
 
-        public async Task<IInventory> GetByIdAsync(string id)
+        public async Task<IInventory> GetByIdAsync(Guid id, int version)
         {
             return await inventoryCollection
-                .Find(inv => inv.InventoryIdentifier == id)
+                .Find(inv => inv.NintendoUserId == id && inv.MajorVersion == version)
                 .SingleOrDefaultAsync() as IInventory;
         }
 

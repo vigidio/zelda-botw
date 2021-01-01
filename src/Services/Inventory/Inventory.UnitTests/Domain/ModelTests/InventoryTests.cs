@@ -20,7 +20,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
 
             // Assert
             inventory.Should().NotBeNull();
-            inventory.InventoryIdentifier.Should().NotBeNullOrEmpty();
+            inventory.NintendoUserId.Should().NotBeEmpty();
             inventory.MajorVersion.Should().Be(0);
         }
 
@@ -122,7 +122,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
 
             // Assert
             aggregate.EventVersion.Should().Be(events.Count - 1);
-            aggregate.InventoryIdentifier.Should().Be(expectedInventory.InventoryIdentifier);
+            aggregate.NintendoUserId.Should().Be(expectedInventory.NintendoUserId);
             aggregate.MajorVersion.Should().Be(expectedInventory.MajorVersion);
             aggregate.WeaponSlot.Should().BeEquivalentTo(expectedInventory.WeaponSlot);
             aggregate.ShieldSlot.Should().BeEquivalentTo(expectedInventory.ShieldSlot);

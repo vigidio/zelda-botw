@@ -6,9 +6,9 @@ namespace Inventory.Domain.DomainEvents
     [DataContract]
     public class MaterialAdded : Event
     {
-        public MaterialAdded(string inventoryIdentifier, int currentVersion, Guid itemId,
+        public MaterialAdded(Guid nintendoUserId, int currentVersion, Guid itemId,
             string name, string description, int materialHp, int materialTime, string type)
-            : base(inventoryIdentifier, currentVersion)
+            : base(nintendoUserId, currentVersion)
         {
             this.ItemId = itemId;
             this.Name = name;

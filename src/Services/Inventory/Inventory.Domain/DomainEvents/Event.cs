@@ -1,18 +1,19 @@
 namespace Inventory.Domain.DomainEvents
 {
+    using System;
     using System.Runtime.Serialization;
 
     [DataContract]
     public abstract class Event
     {
-        protected Event(string inventoryIdentifier)
+        protected Event(Guid nintendoUserId)
         {
-            this.InventoryIdentifier = inventoryIdentifier;
+            this.NintendoUserId = nintendoUserId;
         }
 
-        protected Event(string inventoryIdentifier, int currentMajorVersion)
+        protected Event(Guid nintendoUserId, int currentMajorVersion)
         {
-            this.InventoryIdentifier = inventoryIdentifier;
+            this.NintendoUserId = nintendoUserId;
             this.MajorVersion = currentMajorVersion;
         }
 
@@ -20,7 +21,7 @@ namespace Inventory.Domain.DomainEvents
         public int Version;
 
         [DataMember]
-        public string InventoryIdentifier { get; }
+        public Guid NintendoUserId { get; }
 
         [DataMember]
         public int MajorVersion { get; }

@@ -72,7 +72,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public static List<Event> FirstInputScenario() =>
             new List<Event>
             {
-                new InventoryCreated($"{NintendoUserId}-{InitialMajorVersion}"),
+                new InventoryCreated(NintendoUserId),
             };
 
         public static IInventory FirstExpectedAggregate() =>
@@ -82,10 +82,10 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public static List<Event> SecondInputScenario() =>
             new List<Event>
             {
-                new InventoryCreated($"{NintendoUserId}-{InitialMajorVersion}"),
+                new InventoryCreated(NintendoUserId),
 
                 new WeaponAdded(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Weapon.Id,
                     Weapon.Name,
@@ -105,10 +105,10 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public static List<Event> ThirdInputScenario() =>
             new List<Event>
             {
-                new InventoryCreated($"{NintendoUserId}-{InitialMajorVersion}"),
+                new InventoryCreated(NintendoUserId),
 
                 new WeaponAdded(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Weapon.Id,
                     Weapon.Name,
@@ -119,7 +119,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
                     Weapon.Archetype,
                     Weapon.Hands),
 
-                new GameSaved($"{NintendoUserId}-{InitialMajorVersion + 1}", InitialMajorVersion + 1),
+                new GameSaved(NintendoUserId, InitialMajorVersion + 1),
             };
 
         public static IInventory ThirdExpectedAggregate() =>
@@ -130,10 +130,10 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public static List<Event> FourthInputScenario() =>
             new List<Event>
             {
-                new InventoryCreated($"{NintendoUserId}-{InitialMajorVersion}"),
+                new InventoryCreated(NintendoUserId),
 
                 new MaterialAdded(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Material.Id,
                     Material.Name,
@@ -143,7 +143,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
                     Material.Type.ToString()),
 
                 new MaterialAdded(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Material.Id,
                     Material.Name,
@@ -161,10 +161,10 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public static List<Event> FifthInputScenario() =>
             new List<Event>
             {
-                new InventoryCreated($"{NintendoUserId}-{InitialMajorVersion}"),
+                new InventoryCreated(NintendoUserId),
 
                 new MaterialAdded(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Material.Id,
                     Material.Name,
@@ -174,7 +174,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
                     Material.Type.ToString()),
 
                 new MaterialAdded(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Material.Id,
                     Material.Name,
@@ -184,7 +184,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
                     Material.Type.ToString()),
 
                 new MaterialRemoved(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Material.Id),
             };
@@ -197,10 +197,10 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public static List<Event> SixthInputScenario() =>
             new List<Event>
             {
-                new InventoryCreated($"{NintendoUserId}-{InitialMajorVersion}"),
+                new InventoryCreated(NintendoUserId),
 
                 new MaterialAdded(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Material.Id,
                     Material.Name,
@@ -210,7 +210,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
                     Material.Type.ToString()),
 
                 new MaterialAdded(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Material.Id,
                     Material.Name,
@@ -220,12 +220,12 @@ namespace Inventory.UnitTests.Domain.ModelTests
                     Material.Type.ToString()),
 
                 new MaterialRemoved(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Material.Id),
 
                 new MaterialRemoved(
-                    $"{NintendoUserId}-{InitialMajorVersion}",
+                    NintendoUserId,
                     InitialMajorVersion,
                     Material.Id),
             };
