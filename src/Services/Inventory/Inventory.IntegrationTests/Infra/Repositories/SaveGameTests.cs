@@ -45,7 +45,7 @@ namespace Inventory.IntegrationTests.Infra.Repositories
                 new Mock<IDispatcherEvent>().Object);
         }
 
-        //[Fact]
+        [Fact]
         public async Task GivenSomeChanges_WhenSaveGame_ShouldSaveOnDb()
         {
             // Arrange

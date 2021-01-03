@@ -74,13 +74,13 @@ namespace Inventory.Domain.Models.AggregateRoot
 
         public class HistoryBuilder
         {
-            private readonly List<InventoryDomainEvent> historyChanges = new List<InventoryDomainEvent>();
+            private readonly List<object> historyChanges = new();
 
             private InventoryAggregate inventory;
 
             public HistoryBuilder(Guid nintendoUserId) { }
 
-            public HistoryBuilder LoadEvents(IEnumerable<InventoryDomainEvent> events)
+            public HistoryBuilder LoadEvents(IEnumerable<object> events)
             {
                 this.historyChanges.AddRange(events);
 

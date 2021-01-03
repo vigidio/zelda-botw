@@ -29,7 +29,7 @@ namespace Inventory.Domain.Models.AggregateRoot
             this.changes.Clear();
         }
 
-        public void LoadsFromHistory(IEnumerable<InventoryDomainEvent> history)
+        public void LoadsFromHistory(IEnumerable<object> history)
         {
             foreach (var e in history) this.ApplyEvent(e, false);
         }
@@ -39,10 +39,10 @@ namespace Inventory.Domain.Models.AggregateRoot
             this.ApplyEvent(@event, true);
         }
 
-        private void ApplyEvent(InventoryDomainEvent @event, bool isNew)
+        private void ApplyEvent(object @event, bool isNew)
         {
             if (isNew)
-                this.changes.Add(@event);
+                this.changes.Add(@event as InventoryDomainEvent);
             else
                 this.Raise(@event);
         }

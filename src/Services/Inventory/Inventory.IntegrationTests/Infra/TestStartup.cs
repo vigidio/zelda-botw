@@ -39,8 +39,7 @@ namespace Inventory.IntegrationTests.Infra
                     BsonClassMap.RegisterClassMap<EventData>(cm =>
                     {
                         cm.AutoMap();
-                        cm.MapIdProperty(c => c.NintendoUserId);
-                        cm.MapIdProperty(c => c.Version);
+                        cm.MapIdProperty(c => c.EventId);
                     });
                 
                     BsonSerializer.RegisterSerializer(
