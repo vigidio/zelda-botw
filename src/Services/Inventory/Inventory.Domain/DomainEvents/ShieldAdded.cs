@@ -4,7 +4,7 @@ namespace Inventory.Domain.DomainEvents
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class ShieldAdded : Event
+    public class ShieldAdded : InventoryDomainEvent
     {
         public ShieldAdded(Guid nintendoUserId, int currentVersion)
             : base(nintendoUserId, currentVersion) { }

@@ -108,7 +108,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         [Theory]
         [ClassData(typeof(InventoryProjectionDataTests))]
         public void GivenAListOfEvents_WhenLoadFromHistory_ThenShouldBuildTheAggregate(
-            List<Event> @events,
+            List<InventoryDomainEvent> @events,
             IInventory expectedInventory)
         {
             // Arrange

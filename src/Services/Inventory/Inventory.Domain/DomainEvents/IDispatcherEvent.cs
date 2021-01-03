@@ -4,6 +4,6 @@ namespace Inventory.Domain.DomainEvents
 
     public interface IDispatcherEvent
     {
-        Task Send(Event @event);
+        Task Send(InventoryDomainEvent @event);
     }
 }

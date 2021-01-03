@@ -17,23 +17,18 @@ namespace Inventory.UnitTests.Domain.DomainEventTests
         [Fact]
         public void GivenGameSavedEvent_ThenAllPropertiesShouldBePassed()
         {
-            // Arrange
-            var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
-
-            // Act
+            // Arrange && Act
             var gameSaved = new GameSaved(NintendoUserId, InitialMajorVersion);
 
             // Assert
             gameSaved.NintendoUserId.Should().Be(NintendoUserId);
-            gameSaved.MajorVersion.Should().Be(InitialMajorVersion);
+            gameSaved.Version.Should().Be(InitialMajorVersion);
         }
 
         [Fact]
         public void GivenInventoryCreatedEvent_ThenIdShouldNotBeEmpty()
         {
-            // Arrange
-
-            // Act
+            // Arrange && Act
             var inventoryCreated = new InventoryCreated(NintendoUserId);
 
             // Assert

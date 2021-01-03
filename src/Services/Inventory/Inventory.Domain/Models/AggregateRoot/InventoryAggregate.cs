@@ -112,13 +112,13 @@ namespace Inventory.Domain.Models.AggregateRoot
         private void When(InventoryCreated e)
         {
             this.NintendoUserId = e.NintendoUserId;
-            this.MajorVersion = e.MajorVersion;
+            this.MajorVersion = e.Version;
         }
 
         private void When(GameSaved e)
         {
             this.NintendoUserId = e.NintendoUserId;
-            this.MajorVersion = e.MajorVersion;
+            this.MajorVersion = e.Version;
         }
 
         private void When(WeaponAdded e)

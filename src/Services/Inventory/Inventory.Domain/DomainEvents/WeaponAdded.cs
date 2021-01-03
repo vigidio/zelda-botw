@@ -4,7 +4,7 @@ namespace Inventory.Domain.DomainEvents
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class WeaponAdded : Event
+    public class WeaponAdded : InventoryDomainEvent
     {
         public WeaponAdded(
             Guid nintendoUserId,

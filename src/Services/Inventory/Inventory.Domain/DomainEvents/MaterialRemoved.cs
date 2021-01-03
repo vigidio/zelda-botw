@@ -4,7 +4,7 @@ namespace Inventory.Domain.DomainEvents
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class MaterialRemoved : Event
+    public class MaterialRemoved : InventoryDomainEvent
     {
         public MaterialRemoved(Guid nintendoUserId, int currentMajorVersion, Guid itemId)
             : base(nintendoUserId, currentMajorVersion)

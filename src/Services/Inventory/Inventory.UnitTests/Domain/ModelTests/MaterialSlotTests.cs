@@ -252,7 +252,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             inventory.GetUncommitted().Last().Should().BeOfType<MaterialRemoved>();
             var materialRemoved = inventory.GetUncommitted().Last() as MaterialRemoved;
             materialRemoved!.NintendoUserId.Should().Be(inventory.NintendoUserId);
-            materialRemoved!.MajorVersion.Should().Be(inventory.MajorVersion);
+            materialRemoved!.Version.Should().Be(inventory.MajorVersion);
             materialRemoved!.ItemId.Should().Be(materialToRemove.Id);
         }
     }

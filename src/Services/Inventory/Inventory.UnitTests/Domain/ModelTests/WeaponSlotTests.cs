@@ -74,7 +74,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             inventory.GetUncommitted().Last().Should().BeOfType<WeaponAdded>();
             var weaponAdded = inventory.GetUncommitted().Last() as WeaponAdded;
             weaponAdded!.NintendoUserId.Should().Be(inventory.NintendoUserId);
-            weaponAdded!.MajorVersion.Should().Be(inventory.MajorVersion);
+            weaponAdded!.Version.Should().Be(inventory.MajorVersion);
             weaponAdded!.ItemId.Should().Be(weapon.Id);
             weaponAdded.Should().BeEquivalentTo(weapon, cfg => cfg.Excluding(o => o.Id));
         }

@@ -6,9 +6,9 @@ namespace Inventory.Domain.Models.AggregateRoot
 
     public interface IAggregateChanges : IAggregateRoot
     {
-        IEnumerable<Event> GetUncommitted();
+        IEnumerable<InventoryDomainEvent> GetUncommitted();
 
-        IEnumerable<Event> GetLastCommitted();
+        IEnumerable<InventoryDomainEvent> GetLastCommitted();
 
         void MarkChangesAsCommitted();
     }

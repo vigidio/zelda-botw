@@ -4,7 +4,7 @@ namespace Inventory.Domain.DomainEvents
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class MaterialAdded : Event
+    public class MaterialAdded : InventoryDomainEvent
     {
         public MaterialAdded(Guid nintendoUserId, int currentVersion, Guid itemId,
             string name, string description, int materialHp, int materialTime, string type)

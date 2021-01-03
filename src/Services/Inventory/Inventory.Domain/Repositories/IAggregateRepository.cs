@@ -6,6 +6,6 @@ namespace Inventory.Domain.Repositories
     public interface IAggregateRepository<T>
         where T : IAggregateRoot
     {
-        Task SaveAsync(IAggregateRoot aggregate);
+        Task SaveAsync(IAggregateChanges aggregate);
     }
 }

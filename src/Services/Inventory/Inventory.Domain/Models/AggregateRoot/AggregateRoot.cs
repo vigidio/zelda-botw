@@ -4,7 +4,7 @@ namespace Inventory.Domain.Models.AggregateRoot
     using System.Collections.Generic;
     using Inventory.Domain.DomainEvents;
 
-    public abstract class AggregateRoot : IAggregateRoot, IAggregateChanges
+    public abstract class AggregateRoot : IAggregateChanges
     {
         public Guid NintendoUserId { get; protected set; }
 
@@ -12,36 +12,35 @@ namespace Inventory.Domain.Models.AggregateRoot
 
         public int EventVersion { get; private set; } = -1;
 
-        private readonly Dictionary<Type, Action<object>> handlers = new Dictionary<Type, Action<object>>();
+        private readonly Dictionary<Type, Action<object>> handlers = new();
 
-        private readonly List<Event> changes = new List<Event>();
+        private readonly List<InventoryDomainEvent> changes = new();
 
-        private List<Event> recentChanges = new List<Event>();
+        private List<InventoryDomainEvent> recentChanges = new();
 
-        public IEnumerable<Event> GetUncommitted() => this.changes;
+        public IEnumerable<InventoryDomainEvent> GetUncommitted() => this.changes;
 
-        public IEnumerable<Event> GetLastCommitted() => this.recentChanges;
+        public IEnumerable<InventoryDomainEvent> GetLastCommitted() => this.recentChanges;
 
         public virtual void MarkChangesAsCommitted()
         {
-            this.recentChanges = new List<Event>(this.changes);
+            this.recentChanges = new List<InventoryDomainEvent>(this.changes);
 
             this.changes.Clear();
         }
 
-        public void LoadsFromHistory(IEnumerable<Event> history)
+        public void LoadsFromHistory(IEnumerable<InventoryDomainEvent> history)
         {
             foreach (var e in history) this.ApplyEvent(e, false);
         }
 
-        public void ApplyEvent(Event @event)
+        public void ApplyEvent(InventoryDomainEvent @event)
         {
             this.ApplyEvent(@event, true);
         }
 
-        public void ApplyEvent(Event @event, bool isNew)
+        private void ApplyEvent(InventoryDomainEvent @event, bool isNew)
         {
-            @event.Version = this.EventVersion += 1;
             if (isNew)
                 this.changes.Add(@event);
             else
@@ -50,12 +49,12 @@ namespace Inventory.Domain.Models.AggregateRoot
 
         protected void Register<T>(Action<T> when)
         {
-            handlers.Add(typeof(T), e => when((T)e));
+            this.handlers.Add(typeof(T), e => when((T)e));
         }
 
-        protected void Raise(object e)
+        private void Raise(object e)
         {
-            handlers[e.GetType()](e);
+            this.handlers[e.GetType()](e);
         }
     }
 }

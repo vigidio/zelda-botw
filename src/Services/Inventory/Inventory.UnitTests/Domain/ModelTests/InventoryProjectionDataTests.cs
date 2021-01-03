@@ -69,8 +69,8 @@ namespace Inventory.UnitTests.Domain.ModelTests
             0,
             MaterialType.Nothing);
 
-        public static List<Event> FirstInputScenario() =>
-            new List<Event>
+        public static List<InventoryDomainEvent> FirstInputScenario() =>
+            new List<InventoryDomainEvent>
             {
                 new InventoryCreated(NintendoUserId),
             };
@@ -79,8 +79,8 @@ namespace Inventory.UnitTests.Domain.ModelTests
             new AggregateFactory.InventoryBuilder(NintendoUserId)
                 .Build();
 
-        public static List<Event> SecondInputScenario() =>
-            new List<Event>
+        public static List<InventoryDomainEvent> SecondInputScenario() =>
+            new List<InventoryDomainEvent>
             {
                 new InventoryCreated(NintendoUserId),
 
@@ -102,8 +102,8 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 .WithManyWeapons(new List<Weapon> { Weapon })
                 .Build();
 
-        public static List<Event> ThirdInputScenario() =>
-            new List<Event>
+        public static List<InventoryDomainEvent> ThirdInputScenario() =>
+            new List<InventoryDomainEvent>
             {
                 new InventoryCreated(NintendoUserId),
 
@@ -127,8 +127,8 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 .WithManyWeapons(new List<Weapon> { Weapon })
                 .Build();
 
-        public static List<Event> FourthInputScenario() =>
-            new List<Event>
+        public static List<InventoryDomainEvent> FourthInputScenario() =>
+            new List<InventoryDomainEvent>
             {
                 new InventoryCreated(NintendoUserId),
 
@@ -158,8 +158,8 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 .WithManyMaterials(new List<Material> { Material, Material })
                 .Build();
 
-        public static List<Event> FifthInputScenario() =>
-            new List<Event>
+        public static List<InventoryDomainEvent> FifthInputScenario() =>
+            new List<InventoryDomainEvent>
             {
                 new InventoryCreated(NintendoUserId),
 
@@ -194,8 +194,8 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 .WithManyMaterials(new List<Material> { Material })
                 .Build();
 
-        public static List<Event> SixthInputScenario() =>
-            new List<Event>
+        public static List<InventoryDomainEvent> SixthInputScenario() =>
+            new List<InventoryDomainEvent>
             {
                 new InventoryCreated(NintendoUserId),
 

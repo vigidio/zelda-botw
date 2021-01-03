@@ -4,7 +4,7 @@ namespace Inventory.Domain.DomainEvents
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class InventoryCreated : Event
+    public class InventoryCreated : InventoryDomainEvent
     {
         public InventoryCreated(Guid nintendoUserId)
             : base(nintendoUserId)
