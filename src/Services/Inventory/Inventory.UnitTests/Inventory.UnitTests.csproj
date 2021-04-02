@@ -23,11 +23,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Infra" />
+      <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
+      <Compile Remove="Infra\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Infra\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Infra\**" />
     </ItemGroup>
 
 </Project>

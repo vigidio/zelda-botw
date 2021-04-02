@@ -1,3 +1,5 @@
+using Inventory.Domain.UseCases.NewGame;
+
 namespace Inventory.UnitTests.Domain.DomainEventTests
 {
     using System;
@@ -5,6 +7,8 @@ namespace Inventory.UnitTests.Domain.DomainEventTests
     using FluentAssertions;
     using Inventory.Domain.DomainEvents;
     using Inventory.Domain.Models.Entity;
+    using Inventory.Domain.UseCases.AddItem;
+    using Inventory.Domain.UseCases.SaveGame;
     using Xunit;
 
     [ExcludeFromCodeCoverage]

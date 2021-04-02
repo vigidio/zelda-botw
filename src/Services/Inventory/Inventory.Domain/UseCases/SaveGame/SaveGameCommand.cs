@@ -1,10 +1,11 @@
-namespace Inventory.Domain.Commands
+namespace Inventory.Domain.UseCases.SaveGame
 {
     using System;
+    using Inventory.Domain.Commands;
 
-    public class SaveCommand : InventoryCommand
+    public class SaveGameCommand : InventoryCommand
     {
-        public SaveCommand(Guid nintendoUserId, int currentVersion)
+        public SaveGameCommand(Guid nintendoUserId, int currentVersion)
         {
             this.NintendoUserId = nintendoUserId;
             this.CurrentVersion = currentVersion;

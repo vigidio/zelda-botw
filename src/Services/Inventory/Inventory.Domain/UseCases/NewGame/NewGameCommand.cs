@@ -1,6 +1,7 @@
-namespace Inventory.Domain.Commands
+namespace Inventory.Domain.UseCases.NewGame
 {
     using System;
+    using Inventory.Domain.Commands;
 
     public class NewGameCommand : InventoryCommand
     {

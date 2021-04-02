@@ -1,7 +1,8 @@
-namespace Inventory.Domain.DomainEvents
+namespace Inventory.Domain.UseCases.AddItem
 {
     using System;
     using System.Runtime.Serialization;
+    using Inventory.Domain.DomainEvents;
 
     [DataContract]
     public class MaterialAdded : Event

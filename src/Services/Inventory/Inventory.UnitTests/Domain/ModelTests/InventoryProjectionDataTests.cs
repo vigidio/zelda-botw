@@ -1,3 +1,5 @@
+using Inventory.Domain.UseCases.NewGame;
+
 namespace Inventory.UnitTests.Domain.ModelTests
 {
     using System;
@@ -7,7 +9,9 @@ namespace Inventory.UnitTests.Domain.ModelTests
     using Inventory.Domain.DomainEvents;
     using Inventory.Domain.Models.AggregateRoot;
     using Inventory.Domain.Models.Entity;
-    
+    using Inventory.Domain.UseCases.AddItem;
+    using Inventory.Domain.UseCases.SaveGame;
+
     [ExcludeFromCodeCoverage]
     public class InventoryProjectionDataTests : IEnumerable<object[]>
     {

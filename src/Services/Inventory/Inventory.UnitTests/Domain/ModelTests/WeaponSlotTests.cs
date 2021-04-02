@@ -11,6 +11,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
     using Inventory.Domain.Models.AggregateRoot;
     using Inventory.Domain.Models.Entity;
     using Inventory.Domain.Repositories;
+    using Inventory.Domain.UseCases.AddItem;
     using Moq;
     using Xunit;
     

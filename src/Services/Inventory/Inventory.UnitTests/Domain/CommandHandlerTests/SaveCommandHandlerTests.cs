@@ -13,6 +13,8 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
     using Inventory.Domain.Models.AggregateRoot;
     using Inventory.Domain.Models.Entity;
     using Inventory.Domain.Repositories;
+    using Inventory.Domain.UseCases.AddItem;
+    using Inventory.Domain.UseCases.SaveGame;
     using Moq;
     using Xunit;
     
@@ -23,7 +25,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
 
         private static readonly Guid NintendoUserId = Guid.NewGuid();
 
-        private readonly InventoryCommandHandler commandHandler;
+        private readonly ICommandHandler<SaveGameCommand> commandHandler;
 
         private readonly Mock<IDispatcherEvent> dispatcher;
 
@@ -41,10 +43,8 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
 
             this.itemRepository = new Mock<IItemRepository>();
 
-            this.commandHandler = new InventoryCommandHandler(
-                this.itemRepository.Object,
-                this.eventStoreRepository.Object,
-                this.dispatcher.Object);
+            this.commandHandler = new SaveGameCommandHandler(
+                this.eventStoreRepository.Object);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
             // Arrange
             var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
 
-            var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
+            var saveCommand = new SaveGameCommand(NintendoUserId, InitialMajorVersion);
 
             var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
                 .Build();
@@ -75,7 +75,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
             // Arrange
             var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
 
-            var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
+            var saveCommand = new SaveGameCommand(NintendoUserId, InitialMajorVersion);
 
             this.eventStoreRepository
                 .Setup(o => o.GetByIdAsync(inventoryIdentifier))
@@ -91,7 +91,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
             // Arrange
             var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
 
-            var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
+            var saveCommand = new SaveGameCommand(NintendoUserId, InitialMajorVersion);
 
             var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
                 .Build();
@@ -113,26 +113,24 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
             // Arrange
             var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
 
-            var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
+            var saveCommand = new SaveGameCommand(NintendoUserId, InitialMajorVersion);
 
             var itemId = Guid.NewGuid();
-            var addItemCommand = new AddItemCommand(inventoryIdentifier, itemId, ItemType.Weapon);
-
+            
             this.itemRepository
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
                 .ReturnsAsync(this.fixture.Create<Weapon>());
 
             var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
+                .WithUncommittedChanges(this.fixture.CreateMany<Weapon>(1))
                 .Build();
 
             this.eventStoreRepository
                 .Setup(o => o.GetByIdAsync(inventoryIdentifier))
                 .ReturnsAsync(fakeInventory);
 
-            var resultChangesAddedOneItem = await this.commandHandler.Handle(addItemCommand);
-
             // Assert
-            resultChangesAddedOneItem.GetUncommitted().Should().HaveCount(1);
+            fakeInventory.GetUncommitted().Should().HaveCount(1);
 
             // Act
             var result = await this.commandHandler.Handle(saveCommand);
@@ -141,7 +139,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
             result.GetUncommitted().Should().HaveCount(0);
 
             this.eventStoreRepository
-                .Verify(o => o.SaveAsync(It.IsAny<IInventory>()), Times.Exactly(2));
+                .Verify(o => o.SaveAsync(It.IsAny<IInventory>()), Times.Exactly(1));
         }
 
         [Fact]
@@ -150,7 +148,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
             // Arrange
             var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
 
-            var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
+            var saveCommand = new SaveGameCommand(NintendoUserId, InitialMajorVersion);
 
             var itemId = Guid.NewGuid();
             var addItemCommand = new AddItemCommand(inventoryIdentifier, itemId, ItemType.Weapon);
@@ -160,17 +158,15 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
                 .ReturnsAsync(this.fixture.Create<Weapon>());
 
             var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
+                .WithUncommittedChanges(this.fixture.CreateMany<Weapon>(2))
                 .Build();
 
             this.eventStoreRepository
                 .Setup(o => o.GetByIdAsync(inventoryIdentifier))
                 .ReturnsAsync(fakeInventory);
-
-            await this.commandHandler.Handle(addItemCommand);
-            var resultChangesAddedSecondItem = await this.commandHandler.Handle(addItemCommand);
-
+            
             // Assert
-            resultChangesAddedSecondItem.GetUncommitted().Should().HaveCount(2);
+            fakeInventory.GetUncommitted().Should().HaveCount(2);
 
             // Act
             var result = await this.commandHandler.Handle(saveCommand);
@@ -185,7 +181,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
             result.GetLastCommitted().Last().Version.Should().Be(2);
 
             this.eventStoreRepository
-                .Verify(o => o.SaveAsync(It.IsAny<IInventory>()), Times.Exactly(3));
+                .Verify(o => o.SaveAsync(It.IsAny<IInventory>()), Times.Exactly(1));
         }
 
         [Fact]
@@ -194,7 +190,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
             // Arrange
             var inventoryIdentifier = $"{NintendoUserId}-{InitialMajorVersion}";
 
-            var saveCommand = new SaveCommand(NintendoUserId, InitialMajorVersion);
+            var saveCommand = new SaveGameCommand(NintendoUserId, InitialMajorVersion);
 
             var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
                 .Build();

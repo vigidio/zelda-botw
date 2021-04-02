@@ -13,6 +13,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
     using Inventory.Domain.Models.AggregateRoot;
     using Inventory.Domain.Models.Entity;
     using Inventory.Domain.Repositories;
+    using Inventory.Domain.UseCases.RemoveItem;
     using Moq;
     using Xunit;
     
@@ -41,7 +42,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
 
             this.itemRepository = new Mock<IItemRepository>();
 
-            this.commandHandler = new InventoryCommandHandler(
+            this.commandHandler = new RemoveItemCommandHandler(
                 this.itemRepository.Object,
                 this.eventStoreRepository.Object,
                 this.dispatcher.Object);

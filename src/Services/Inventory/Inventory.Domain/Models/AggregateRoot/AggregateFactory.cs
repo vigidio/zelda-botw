@@ -1,7 +1,10 @@
+using Inventory.Domain.UseCases.NewGame;
+
 namespace Inventory.Domain.Models.AggregateRoot
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Inventory.Domain.DomainEvents;
     using Inventory.Domain.Models.Entity;
     using Inventory.Domain.Models.Entity.Slot;
@@ -26,6 +29,7 @@ namespace Inventory.Domain.Models.AggregateRoot
             private ISingleSlot<Shield> shieldSlot;
             private ISingleSlot<Weapon> weaponSlot;
             private IStackSlot<Material> materialSlot;
+            private ISingleSlot<Weapon> newWeaponSlot;
 
             public InventoryBuilder(Guid nintendoUserId)
             {
@@ -59,6 +63,13 @@ namespace Inventory.Domain.Models.AggregateRoot
                 return this;
             }
 
+            public InventoryBuilder WithUncommittedChanges(IEnumerable<Weapon> weapons)
+            {
+                this.newWeaponSlot = new WeaponSlot(weapons);
+
+                return this;
+            }
+
             public IInventory Build()
             {
                 var inventory = new InventoryAggregate(
@@ -67,6 +78,8 @@ namespace Inventory.Domain.Models.AggregateRoot
                         this.weaponSlot,
                         this.shieldSlot,
                         this.materialSlot);
+
+                newWeaponSlot?.SlotBag?.ForEach(i => inventory.AddItem(i));
 
                 return inventory;
             }

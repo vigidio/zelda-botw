@@ -1,3 +1,5 @@
+using Inventory.Domain.UseCases.NewGame;
+
 namespace Inventory.UnitTests.Domain.CommandHandlerTests
 {
     using System;
@@ -31,8 +33,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
 
             this.dispatcher = new Mock<IDispatcherEvent>();
 
-            this.commandHandler = new InventoryCommandHandler(
-                new Mock<IItemRepository>().Object,
+            this.commandHandler = new NewGameCommandHandler(
                 this.eventStoreRepository.Object,
                 this.dispatcher.Object);
         }

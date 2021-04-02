@@ -1,9 +1,13 @@
+using Inventory.Domain.UseCases.NewGame;
+
 namespace Inventory.Domain.Models.AggregateRoot
 {
     using System;
     using Inventory.Domain.DomainEvents;
     using Inventory.Domain.Models.Entity;
     using Inventory.Domain.Models.Entity.Slot;
+    using Inventory.Domain.UseCases.AddItem;
+    using Inventory.Domain.UseCases.SaveGame;
 
     public class InventoryAggregate : AggregateRoot, IInventory
     {

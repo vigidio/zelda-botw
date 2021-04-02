@@ -1,3 +1,5 @@
+using Inventory.Domain.UseCases.NewGame;
+
 namespace Inventory.UnitTests.Domain.ModelTests
 {
     using System;

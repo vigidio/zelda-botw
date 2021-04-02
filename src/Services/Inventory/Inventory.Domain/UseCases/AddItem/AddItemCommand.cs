@@ -1,6 +1,7 @@
-namespace Inventory.Domain.Commands
+namespace Inventory.Domain.UseCases.AddItem
 {
     using System;
+    using Inventory.Domain.Commands;
     using Inventory.Domain.Models.Entity;
 
     public class AddItemCommand : InventoryCommand
