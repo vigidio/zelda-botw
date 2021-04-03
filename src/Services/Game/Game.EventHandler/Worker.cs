@@ -8,22 +8,62 @@ using Microsoft.Extensions.Logging;
 
 namespace Game.EventHandler
 {
+    using KafkaFlow;
+    using KafkaFlow.Serializer;
+    using KafkaFlow.Serializer.Json;
+    using KafkaFlow.TypedHandler;
+    using Microsoft.Extensions.DependencyInjection;
+
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<Worker> logger;
 
+        private readonly IKafkaBus bus;
         public Worker(ILogger<Worker> logger)
         {
-            _logger = logger;
+            this.logger = logger;
+            
+            var services = new ServiceCollection();
+            
+            const string consumerName = "game-event-handler";
+
+            const string gameDefaultTopic = "game.zelda.botw.outbox";
+
+            services
+                .AddKafka(kafka => kafka
+                    .AddCluster(cluster => cluster
+                        .WithBrokers(new[] {"localhost:9092"})
+                        .AddConsumer(consumer => consumer
+                            .Topic(gameDefaultTopic)
+                            .WithGroupId(consumerName)
+                            .WithName(consumerName)
+                            .WithBufferSize(100)
+                            .WithWorkersCount(5)
+                            .WithAutoOffsetReset(AutoOffsetReset.Latest)
+                            .AddMiddlewares(
+                                middlewares => middlewares
+                                    .AddSerializer<JsonMessageSerializer>()
+                                    .AddTypedHandlers(
+                                        handlers => handlers
+                                            .WithHandlerLifetime(InstanceLifetime.Singleton)
+                                            .AddHandler<NewGameHandler>())))));
+            
+            var provider = services.BuildServiceProvider();
+
+            bus = provider.CreateKafkaBus();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            await bus.StartAsync(stoppingToken);
+            
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
             }
+
+            await bus.StopAsync();
         }
     }
 }
