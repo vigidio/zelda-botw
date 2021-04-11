@@ -7,6 +7,7 @@ namespace Inventory.Infra.Repositories
     using Inventory.Domain.Models.AggregateRoot;
     using Inventory.Domain.Repositories;
     using Inventory.Infra.Configurations;
+    using Microsoft.Extensions.Options;
 
 
     /// <summary>
@@ -19,7 +20,7 @@ namespace Inventory.Infra.Repositories
         /// <summary>
         /// Initializes a new instance of the <see cref="InventoryRepository"/> class.
         /// </summary>
-        public InventoryRepository(RepositoryConfiguration configuration)
+        public InventoryRepository(IOptions<RepositoryConfiguration> configuration)
         {
             BsonClassMap.RegisterClassMap<AggregateRoot>(cm =>
             {
@@ -27,7 +28,7 @@ namespace Inventory.Infra.Repositories
                 cm.MapIdProperty(c => c.InventoryIdentifier);
             });
 
-            var client = new MongoClient(configuration.Mongo.ConnectionString);
+            var client = new MongoClient(configuration.Value.Mongo.ConnectionString);
             var database = client.GetDatabase("botw");
             this.inventoryCollection = database.GetCollection<IAggregateRoot>("inventory");
         }

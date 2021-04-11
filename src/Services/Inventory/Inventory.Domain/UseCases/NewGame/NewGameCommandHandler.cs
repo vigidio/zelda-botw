@@ -1,12 +1,12 @@
-using System.Linq;
-using System.Threading.Tasks;
-using Inventory.Domain.CommandHandlers;
-using Inventory.Domain.DomainEvents;
-using Inventory.Domain.Models.AggregateRoot;
-using Inventory.Domain.Repositories;
-
 namespace Inventory.Domain.UseCases.NewGame
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Inventory.Domain.CommandHandlers;
+    using Inventory.Domain.DomainEvents;
+    using Inventory.Domain.Models.AggregateRoot;
+    using Inventory.Domain.Repositories;
+    
     public class NewGameCommandHandler : ICommandHandler<NewGameCommand>
     {
         private readonly IDispatcherEvent dispatcherEvent;
