@@ -1,12 +1,12 @@
-using Inventory.Domain.UseCases.NewGame;
-
 namespace Inventory.Domain.Models.AggregateRoot
 {
     using System;
+    using System.Linq;
     using Inventory.Domain.DomainEvents;
     using Inventory.Domain.Models.Entity;
     using Inventory.Domain.Models.Entity.Slot;
     using Inventory.Domain.UseCases.AddItem;
+    using Inventory.Domain.UseCases.NewGame;
     using Inventory.Domain.UseCases.SaveGame;
 
     public class InventoryAggregate : AggregateRoot, IInventory
@@ -39,7 +39,11 @@ namespace Inventory.Domain.Models.AggregateRoot
 
         public IStackSlot<Material> MaterialSlot { get; }
 
-        public void AddItem(IItem item)
+        public int TotalItems => this.MaterialSlot.SlotBag.Count +
+                                 this.WeaponSlot.SlotBag.Count +
+                                 this.ShieldSlot.SlotBag.Count;
+
+        public IInventory AddItem(IItem item)
         {
             switch (item)
             {
@@ -56,9 +60,11 @@ namespace Inventory.Domain.Models.AggregateRoot
                     this.ApplyEvent(this.CreateMaterialAddedEvent(material));
                     break;
             }
+
+            return this;
         }
 
-        public void RemoveItem(IItem item)
+        public IInventory RemoveItem(IItem item)
         {
             switch (item)
             {
@@ -68,11 +74,15 @@ namespace Inventory.Domain.Models.AggregateRoot
                         this.InventoryIdentifier, this.MajorVersion, material.Id));
                     break;
             }
+
+            return this;
         }
 
-        public void Save()
+        public IInventory Save()
         {
             this.ApplyEvent(new GameSaved(this.InventoryIdentifier, this.MajorVersion));
+
+            return this;
         }
 
         private MaterialAdded CreateMaterialAddedEvent(Material material)

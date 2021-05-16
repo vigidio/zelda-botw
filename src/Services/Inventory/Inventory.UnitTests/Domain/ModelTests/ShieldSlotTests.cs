@@ -33,7 +33,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var shield = this.fixture.Create<Shield>();
 
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.ShieldSlot.SlotBag.Should().HaveCount(0);
@@ -51,7 +51,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var shield = this.fixture.Create<Shield>();
 
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.GetUncommitted().Should().HaveCount(1);
@@ -70,7 +70,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var initialShields = this.fixture.CreateMany<Shield>(4);
 
-            var fakeLoadedInventory = new AggregateFactory.InventoryBuilder(Guid.NewGuid())
+            var fakeLoadedInventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
                 .WithManyShields(initialShields)
                 .Build();
 

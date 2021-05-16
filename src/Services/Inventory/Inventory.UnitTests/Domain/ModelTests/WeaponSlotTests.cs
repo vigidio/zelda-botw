@@ -31,7 +31,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenAWeaponSlot_WhenANewWeaponSlotIsCreated_TotalSizeOfSlotsShouldBeEight()
         {
             // Arrange && Act
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.WeaponSlot.TotalSize.Should().Be(8);
@@ -43,7 +43,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var weapon = this.fixture.Create<Weapon>();
 
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.WeaponSlot.SlotBag.Should().HaveCount(0);
@@ -61,7 +61,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var weapon = this.fixture.Create<Weapon>();
 
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.GetUncommitted().Should().HaveCount(1);
@@ -86,7 +86,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var initialWeapons = this.fixture.CreateMany<Weapon>(8);
 
-            var fakeLoadedInventory = new AggregateFactory.InventoryBuilder(Guid.NewGuid())
+            var fakeLoadedInventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
                 .WithManyWeapons(initialWeapons)
                 .Build();
 

@@ -10,11 +10,13 @@ namespace Inventory.Domain.Models.AggregateRoot
         ISingleSlot<Shield> ShieldSlot { get; }
 
         IStackSlot<Material> MaterialSlot { get; }
+        
+        int TotalItems { get; }
 
-        void AddItem(IItem item);
+        IInventory AddItem(IItem item);
 
-        void RemoveItem(IItem item);
+        IInventory RemoveItem(IItem item);
 
-        void Save();
+        IInventory Save();
     }
 }

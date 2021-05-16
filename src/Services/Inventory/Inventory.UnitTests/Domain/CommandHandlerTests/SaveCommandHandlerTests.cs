@@ -55,7 +55,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
 
             var saveCommand = new SaveGameCommand(NintendoUserId, InitialMajorVersion);
 
-            var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
+            var fakeInventory = new InventoryFactory.InventoryBuilder(NintendoUserId)
                 .Build();
 
             this.eventStoreRepository
@@ -93,7 +93,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
 
             var saveCommand = new SaveGameCommand(NintendoUserId, InitialMajorVersion);
 
-            var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
+            var fakeInventory = new InventoryFactory.InventoryBuilder(NintendoUserId)
                 .Build();
 
             this.eventStoreRepository
@@ -121,7 +121,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
                 .ReturnsAsync(this.fixture.Create<Weapon>());
 
-            var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
+            var fakeInventory = new InventoryFactory.InventoryBuilder(NintendoUserId)
                 .WithUncommittedChanges(this.fixture.CreateMany<Weapon>(1))
                 .Build();
 
@@ -157,7 +157,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
                 .ReturnsAsync(this.fixture.Create<Weapon>());
 
-            var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
+            var fakeInventory = new InventoryFactory.InventoryBuilder(NintendoUserId)
                 .WithUncommittedChanges(this.fixture.CreateMany<Weapon>(2))
                 .Build();
 
@@ -192,7 +192,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
 
             var saveCommand = new SaveGameCommand(NintendoUserId, InitialMajorVersion);
 
-            var fakeInventory = new AggregateFactory.InventoryBuilder(NintendoUserId)
+            var fakeInventory = new InventoryFactory.InventoryBuilder(NintendoUserId)
                 .Build();
 
             this.eventStoreRepository

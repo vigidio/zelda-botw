@@ -1,19 +1,17 @@
-using Inventory.Domain.UseCases.NewGame;
-
 namespace Inventory.Domain.Models.AggregateRoot
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Inventory.Domain.DomainEvents;
     using Inventory.Domain.Models.Entity;
     using Inventory.Domain.Models.Entity.Slot;
+    using Inventory.Domain.UseCases.NewGame;
 
-    public static class AggregateFactory
+    public static class InventoryFactory
     {
         private const int InitialVersion = 0;
 
-        public static IInventory StartNew(Guid nintendoUserId)
+        public static IInventory Create(Guid nintendoUserId)
         {
             var newInventory = new InventoryAggregate(nintendoUserId, InitialVersion);
 

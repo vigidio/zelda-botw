@@ -105,7 +105,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
 
             this.eventStoreRepository
                 .Setup(o => o.GetByIdAsync(inventoryIdentifier))
-                .ReturnsAsync(AggregateFactory.StartNew(NintendoUserId));
+                .ReturnsAsync(InventoryFactory.Create(NintendoUserId));
 
             this.eventStoreRepository
                 .Setup(o => o.SaveAsync(It.IsAny<IInventory>()))

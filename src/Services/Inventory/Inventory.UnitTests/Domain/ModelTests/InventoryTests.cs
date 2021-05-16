@@ -18,7 +18,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenANewGame_WhenCreateInventory_ThenSuccess()
         {
             // Arrange & Act
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.Should().NotBeNull();
@@ -30,7 +30,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenANewGame_WhenCreateInventory_ThenAnInventoryCreatedEventShouldOccur()
         {
             // Arrange & Act
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.GetUncommitted().Should().HaveCount(1);
@@ -42,7 +42,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenANewGame_WhenInventoryCreated_ThenShouldHave8SlotsForWeapon()
         {
             // Arrange & Act
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.WeaponSlot.TotalSize.Should().Be(8);
@@ -52,7 +52,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenANewGame_WhenInventoryCreated_ThenShouldHave4SlotsForShields()
         {
             // Arrange & Act
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.ShieldSlot.TotalSize.Should().Be(4);
@@ -62,7 +62,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenAListOfChanges_WhenMarkChangesAsCommitted_ThenRecentChangesShouldStoreCommittedChanges()
         {
             // Arrange
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.GetLastCommitted().Should().HaveCount(0);
@@ -78,7 +78,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenAListOfChanges_WhenMarkChangesAsCommitted_ThenChangesShouldBeClear()
         {
             // Arrange
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.GetUncommitted().Should().HaveCount(1);
@@ -94,7 +94,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenAListOfChanges_WhenMarkChangesAsCommitted_ThenAMajorVersionShouldBeIncremented()
         {
             // Arrange
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.GetUncommitted().Should().HaveCount(1);
@@ -116,7 +116,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var nintendoUserId = Guid.Parse("c1ffe919-facf-4e1d-a765-477a1d13ee2e");
 
-            var inventoryBuilder = new AggregateFactory.HistoryBuilder(nintendoUserId)
+            var inventoryBuilder = new InventoryFactory.HistoryBuilder(nintendoUserId)
                 .LoadEvents(events);
 
             // Act

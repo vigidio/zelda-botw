@@ -31,7 +31,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenAMaterialSlot_WhenANewMaterialSlotIsCreated_TotalSizeOfSlotsShouldBeOneHundredAndSixty()
         {
             // Arrange && Act
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.MaterialSlot.TotalSize.Should().Be(160);
@@ -41,7 +41,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenAMaterialSlot_WhenANewMaterialSlotIsCreated_TotalStackSizeShouldBeNineHundredAndNinetyNine()
         {
             // Arrange && Act
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.MaterialSlot.TotalQuantities.Should().Be(999);
@@ -59,7 +59,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 0,
                 MaterialType.Hearty);
 
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.MaterialSlot.SlotBag.Should().HaveCount(0);
@@ -83,7 +83,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 0,
                 MaterialType.Hearty);
 
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.MaterialSlot.SlotBag.Should().HaveCount(0);
@@ -108,7 +108,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 0,
                 MaterialType.Hearty);
 
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             for (var i = 0; i < 999; i++)
             {
@@ -134,7 +134,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
                 0,
                 MaterialType.Hearty);
 
-            var inventory = AggregateFactory.StartNew(Guid.NewGuid());
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
 
             // Assert
             inventory.GetUncommitted().Should().HaveCount(1);
@@ -158,7 +158,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var initialMaterials = this.fixture.CreateMany<Material>(160);
 
-            var fakeLoadedInventory = new AggregateFactory.InventoryBuilder(Guid.NewGuid())
+            var fakeLoadedInventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
                 .WithManyMaterials(initialMaterials)
                 .Build();
 
@@ -186,7 +186,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
 
             var materialToRemove = initialMaterials.First();
 
-            var inventory = new AggregateFactory.InventoryBuilder(Guid.NewGuid())
+            var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
                 .WithManyMaterials(initialMaterials)
                 .Build();
 
@@ -202,6 +202,23 @@ namespace Inventory.UnitTests.Domain.ModelTests
         }
 
         [Fact]
+        public void GivenThreeMaterialsWasAddedInTheInventory_WhenRemoveOne_ShouldHaveTwo()
+        {
+            // Arrange
+            var material = fixture.Create<Material>();
+            
+            // Act
+            var inventory = InventoryFactory.Create(Guid.NewGuid())
+                .AddItem(material)
+                .AddItem(fixture.Create<Shield>())
+                .RemoveItem(material)
+                .AddItem(fixture.Create<Weapon>());
+            
+            // Assert
+            inventory.TotalItems.Should().Be(2);
+        }
+
+        [Fact]
         public void GivenAMaterialSlotWithSomeMaterials_WhenRemovedAValidItemWithMoreThan1Quantity_ThenQuantityForThisMaterialShouldBeDecremented()
         {
             // Arrange
@@ -212,7 +229,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
 
             var materialToRemove = initialMaterials.First();
 
-            var inventory = new AggregateFactory.InventoryBuilder(Guid.NewGuid())
+            var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
                 .WithManyMaterials(initialMaterials)
                 .Build();
 
@@ -236,7 +253,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
 
             var materialToRemove = initialMaterials.First();
 
-            var inventory = new AggregateFactory.InventoryBuilder(Guid.NewGuid())
+            var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
                 .WithManyMaterials(initialMaterials)
                 .Build();
 

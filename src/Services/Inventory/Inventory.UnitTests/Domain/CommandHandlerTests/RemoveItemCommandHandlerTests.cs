@@ -110,7 +110,7 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
                 .ReturnsAsync(initialMaterials.First());
 
-            var fakeLoadedInventory = new AggregateFactory.InventoryBuilder(Guid.NewGuid())
+            var fakeLoadedInventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
                 .WithManyMaterials(initialMaterials)
                 .Build();
 

@@ -22,7 +22,7 @@ namespace Inventory.Domain.UseCases.NewGame
         }
         public async Task<IAggregateChanges> Handle(NewGameCommand message)
         {
-            var newInventory = AggregateFactory.StartNew(message.NintendoUserId);
+            var newInventory = InventoryFactory.Create(message.NintendoUserId);
 
             await this.eventStoreRepository.DeleteAsync(message.NintendoUserId);
 
