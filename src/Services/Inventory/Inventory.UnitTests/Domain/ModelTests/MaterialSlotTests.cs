@@ -202,7 +202,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
         }
 
         [Fact]
-        public void GivenThreeMaterialsWasAddedInTheInventory_WhenRemoveOne_ShouldHaveTwo()
+        public void GivenThreeItemsInTheInventory_WhenRemoveOneMaterial_ShouldHaveTwoItems()
         {
             // Arrange
             var material = fixture.Create<Material>();

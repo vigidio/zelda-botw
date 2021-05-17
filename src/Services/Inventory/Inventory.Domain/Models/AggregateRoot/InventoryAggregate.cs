@@ -73,6 +73,11 @@ namespace Inventory.Domain.Models.AggregateRoot
                     this.ApplyEvent(new MaterialRemoved(
                         this.InventoryIdentifier, this.MajorVersion, material.Id));
                     break;
+                case Weapon weapon:
+                    this.WeaponSlot.Remove(weapon.Id);
+                    this.ApplyEvent(new WeaponRemoved(
+                        this.InventoryIdentifier, this.MajorVersion, weapon.Id));
+                    break;
             }
 
             return this;

@@ -3,6 +3,7 @@ namespace Inventory.Domain.Models.Entity.Slot
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Linq;
     using Inventory.Domain.Exceptions;
 
     internal class WeaponSlot : ISingleSlot<Weapon>
@@ -38,7 +39,12 @@ namespace Inventory.Domain.Models.Entity.Slot
 
         public void Remove(Guid itemId)
         {
-            throw new NotImplementedException();
+            var weapon = this.SlotBag.FirstOrDefault(o => o.Id == itemId);
+
+            if (weapon == null) return;
+            
+            var immutableList = this.SlotBag.Remove(weapon);
+            this.SlotBag = immutableList;
         }
     }
 }

@@ -104,5 +104,50 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Act && Assert
             Assert.Throws<FullSlotException>(() => inventory.WeaponSlot.Add(weapon));
         }
+        
+        [Fact]
+        public void GivenThreeItemsInTheInventory_WhenRemoveOneWeapon_ShouldHaveTwoItems()
+        {
+            // Arrange
+            var weapon = fixture.Create<Weapon>();
+            
+            // Act
+            var inventory = InventoryFactory.Create(Guid.NewGuid())
+                .AddItem(weapon)
+                .AddItem(fixture.Create<Shield>())
+                .RemoveItem(weapon)
+                .AddItem(fixture.Create<Weapon>());
+            
+            // Assert
+            inventory.TotalItems.Should().Be(2);
+        }
+        
+        [Fact]
+        public void GivenAWeaponSlotWithSomeWeapons_WhenRemovedAValidItem_ThenWeaponRemovedEventShouldOccur()
+        {
+            // Arrange
+            var initialMaterials = this.fixture.CreateMany<Weapon>(6);
+
+            var materialToRemove = initialMaterials.First();
+
+            var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
+                .WithManyWeapons(initialMaterials)
+                .Build();
+
+            // Assert
+            inventory.GetUncommitted().Should().HaveCount(0);
+
+            // Act
+            inventory.RemoveItem(materialToRemove);
+
+            // Assert
+            inventory.GetUncommitted().Should().HaveCount(1);
+            inventory.GetUncommitted().Last().Version.Should().Be(0);
+            inventory.GetUncommitted().Last().Should().BeOfType<WeaponRemoved>();
+            var weaponRemoved = inventory.GetUncommitted().Last() as WeaponRemoved;
+            weaponRemoved!.InventoryIdentifier.Should().Be(inventory.InventoryIdentifier);
+            weaponRemoved!.MajorVersion.Should().Be(inventory.MajorVersion);
+            weaponRemoved!.ItemId.Should().Be(materialToRemove.Id);
+        }
     }
 }
