@@ -3,6 +3,7 @@ namespace Inventory.Domain.Models.Entity.Slot
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Linq;
     using Inventory.Domain.Exceptions;
 
     internal class ShieldSlot : ISingleSlot<Shield>
@@ -38,7 +39,12 @@ namespace Inventory.Domain.Models.Entity.Slot
 
         public void Remove(Guid itemId)
         {
-            throw new NotImplementedException();
+            var shield = this.SlotBag.FirstOrDefault(o => o.Id == itemId);
+
+            if (shield == null) return;
+            
+            var immutableList = this.SlotBag.Remove(shield);
+            this.SlotBag = immutableList;
         }
     }
 }

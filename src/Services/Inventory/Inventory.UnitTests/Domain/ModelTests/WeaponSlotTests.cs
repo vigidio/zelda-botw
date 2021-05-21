@@ -128,7 +128,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var initialMaterials = this.fixture.CreateMany<Weapon>(6);
 
-            var materialToRemove = initialMaterials.First();
+            var weaponToRemove = initialMaterials.First();
 
             var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
                 .WithManyWeapons(initialMaterials)
@@ -138,7 +138,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             inventory.GetUncommitted().Should().HaveCount(0);
 
             // Act
-            inventory.RemoveItem(materialToRemove);
+            inventory.RemoveItem(weaponToRemove);
 
             // Assert
             inventory.GetUncommitted().Should().HaveCount(1);
@@ -147,7 +147,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             var weaponRemoved = inventory.GetUncommitted().Last() as WeaponRemoved;
             weaponRemoved!.InventoryIdentifier.Should().Be(inventory.InventoryIdentifier);
             weaponRemoved!.MajorVersion.Should().Be(inventory.MajorVersion);
-            weaponRemoved!.ItemId.Should().Be(materialToRemove.Id);
+            weaponRemoved!.ItemId.Should().Be(weaponToRemove.Id);
         }
     }
 }

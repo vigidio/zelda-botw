@@ -12,6 +12,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
     using Inventory.Domain.Models.Entity;
     using Inventory.Domain.Repositories;
     using Inventory.Domain.UseCases.AddItem;
+    using Inventory.Domain.UseCases.RemoveItem;
     using Moq;
     using Xunit;
     
@@ -87,6 +88,51 @@ namespace Inventory.UnitTests.Domain.ModelTests
 
             // Act && Assert
             Assert.Throws<FullSlotException>(() => inventory.ShieldSlot.Add(shield));
+        }
+        
+        [Fact]
+        public void GivenThreeItemsInTheInventory_WhenRemoveOneShield_ShouldHaveTwoItems()
+        {
+            // Arrange
+            var shield = fixture.Create<Shield>();
+            
+            // Act
+            var inventory = InventoryFactory.Create(Guid.NewGuid())
+                .AddItem(shield)
+                .AddItem(fixture.Create<Material>())
+                .RemoveItem(shield)
+                .AddItem(fixture.Create<Weapon>());
+            
+            // Assert
+            inventory.TotalItems.Should().Be(2);
+        }
+        
+        [Fact]
+        public void GivenAShieldSlotWithSomeShields_WhenRemovedAValidItem_ThenShieldRemovedEventShouldOccur()
+        {
+             // Arrange
+             var initialMaterials = this.fixture.CreateMany<Shield>(4);
+        
+             var shieldToRemove = initialMaterials.First();
+        
+             var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
+                 .WithManyShields(initialMaterials)
+                 .Build();
+        
+             // Assert
+             inventory.GetUncommitted().Should().HaveCount(0);
+        
+             // Act
+             inventory.RemoveItem(shieldToRemove);
+        
+             // Assert
+             inventory.GetUncommitted().Should().HaveCount(1);
+             inventory.GetUncommitted().Last().Version.Should().Be(0);
+             inventory.GetUncommitted().Last().Should().BeOfType<ShieldRemoved>();
+             var shieldRemoved = inventory.GetUncommitted().Last() as ShieldRemoved;
+             shieldRemoved!.InventoryIdentifier.Should().Be(inventory.InventoryIdentifier);
+             shieldRemoved!.MajorVersion.Should().Be(inventory.MajorVersion);
+             shieldRemoved!.ItemId.Should().Be(shieldToRemove.Id);
         }
     }
 }

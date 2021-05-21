@@ -7,6 +7,7 @@ namespace Inventory.Domain.Models.AggregateRoot
     using Inventory.Domain.Models.Entity.Slot;
     using Inventory.Domain.UseCases.AddItem;
     using Inventory.Domain.UseCases.NewGame;
+    using Inventory.Domain.UseCases.RemoveItem;
     using Inventory.Domain.UseCases.SaveGame;
 
     public class InventoryAggregate : AggregateRoot, IInventory
@@ -77,6 +78,11 @@ namespace Inventory.Domain.Models.AggregateRoot
                     this.WeaponSlot.Remove(weapon.Id);
                     this.ApplyEvent(new WeaponRemoved(
                         this.InventoryIdentifier, this.MajorVersion, weapon.Id));
+                    break;
+                case Shield shield:
+                    this.ShieldSlot.Remove(shield.Id);
+                    this.ApplyEvent(new ShieldRemoved(
+                        this.InventoryIdentifier, this.MajorVersion, shield.Id));
                     break;
             }
 
