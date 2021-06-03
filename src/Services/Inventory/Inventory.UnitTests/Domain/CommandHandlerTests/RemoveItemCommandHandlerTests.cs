@@ -110,9 +110,12 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
                 .Setup(o => o.GetByIdAsync(itemId.ToString()))
                 .ReturnsAsync(initialMaterials.First());
 
-            var fakeLoadedInventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
-                .WithManyMaterials(initialMaterials)
-                .Build();
+            var fakeLoadedInventory = InventoryFactory.Create(Guid.NewGuid());
+            const int createdEventCount = 1;
+            foreach (var initialMaterial in initialMaterials)
+            {
+                fakeLoadedInventory.AddItem(initialMaterial);
+            }
 
             this.eventStoreRepository
                 .Setup(o => o.GetByIdAsync(inventoryIdentifier))
@@ -126,7 +129,10 @@ namespace Inventory.UnitTests.Domain.CommandHandlerTests
             var resultChangesRemovedTwoItems = await this.commandHandler.Handle(removeItemCommand);
 
             // Assert
-            resultChangesRemovedTwoItems.GetUncommitted().Should().HaveCount(1);
+            resultChangesRemovedTwoItems
+                .GetUncommitted()
+                .Should()
+                .HaveCount(createdEventCount + initialMaterials.Count + 1);
 
             this.eventStoreRepository.VerifyAll();
             this.itemRepository.VerifyAll();

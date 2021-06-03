@@ -86,9 +86,11 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var initialWeapons = this.fixture.CreateMany<Weapon>(8);
 
-            var fakeLoadedInventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
-                .WithManyWeapons(initialWeapons)
-                .Build();
+            var fakeLoadedInventory = InventoryFactory.Create(Guid.NewGuid());
+            foreach (var initialWeapon in initialWeapons)
+            {
+                fakeLoadedInventory.AddItem(initialWeapon);
+            }
 
             this.inventoryRepositoryMock
                 .Setup(o => o.GetByIdAsync(It.IsAny<string>()))
@@ -126,23 +128,25 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenAWeaponSlotWithSomeWeapons_WhenRemovedAValidItem_ThenWeaponRemovedEventShouldOccur()
         {
             // Arrange
-            var initialMaterials = this.fixture.CreateMany<Weapon>(6);
+            var initialWeapons = this.fixture.CreateMany<Weapon>(6).ToList();
 
-            var weaponToRemove = initialMaterials.First();
+            var weaponToRemove = initialWeapons.First();
 
-            var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
-                .WithManyWeapons(initialMaterials)
-                .Build();
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
+            foreach (var initialWeapon in initialWeapons)
+            {
+                inventory.AddItem(initialWeapon);
+            }
 
             // Assert
-            inventory.GetUncommitted().Should().HaveCount(0);
+            inventory.GetUncommitted().Should().HaveCount(initialWeapons.Count + 1);
 
             // Act
             inventory.RemoveItem(weaponToRemove);
 
             // Assert
-            inventory.GetUncommitted().Should().HaveCount(1);
-            inventory.GetUncommitted().Last().Version.Should().Be(0);
+            inventory.GetUncommitted().Should().HaveCount(initialWeapons.Count + 2);
+            inventory.GetUncommitted().Last().Version.Should().Be(initialWeapons.Count + 1);
             inventory.GetUncommitted().Last().Should().BeOfType<WeaponRemoved>();
             var weaponRemoved = inventory.GetUncommitted().Last() as WeaponRemoved;
             weaponRemoved!.InventoryIdentifier.Should().Be(inventory.InventoryIdentifier);

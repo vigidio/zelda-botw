@@ -24,8 +24,6 @@ namespace Inventory.Domain.Models.AggregateRoot
 
         public virtual void MarkChangesAsCommitted()
         {
-            this.MajorVersion += 1;
-
             this.recentChanges = new List<Event>(this.changes);
 
             this.changes.Clear();

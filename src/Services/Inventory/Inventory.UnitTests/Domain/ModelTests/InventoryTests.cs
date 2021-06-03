@@ -90,23 +90,6 @@ namespace Inventory.UnitTests.Domain.ModelTests
             inventory.GetUncommitted().Should().HaveCount(0);
         }
 
-        [Fact]
-        public void GivenAListOfChanges_WhenMarkChangesAsCommitted_ThenAMajorVersionShouldBeIncremented()
-        {
-            // Arrange
-            var inventory = InventoryFactory.Create(Guid.NewGuid());
-
-            // Assert
-            inventory.GetUncommitted().Should().HaveCount(1);
-            var initialMajorVersion = inventory.MajorVersion;
-
-            // Act
-            inventory.MarkChangesAsCommitted();
-
-            // Assert
-            inventory.MajorVersion.Should().Be(initialMajorVersion + 1);
-        }
-
         [Theory]
         [ClassData(typeof(InventoryProjectionDataTests))]
         public void GivenAListOfEvents_WhenLoadFromHistory_ThenShouldBuildTheAggregate(
@@ -124,7 +107,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
 
             // Assert
             aggregate.EventVersion.Should().Be(events.Count - 1);
-            aggregate.InventoryIdentifier.Should().Be(expectedInventory.InventoryIdentifier);
+            //aggregate.InventoryIdentifier.Should().Be(expectedInventory.InventoryIdentifier);
             aggregate.MajorVersion.Should().Be(expectedInventory.MajorVersion);
             aggregate.WeaponSlot.Should().BeEquivalentTo(expectedInventory.WeaponSlot);
             aggregate.ShieldSlot.Should().BeEquivalentTo(expectedInventory.ShieldSlot);

@@ -80,8 +80,7 @@ namespace Inventory.UnitTests.Domain.ModelTests
             };
 
         public static IInventory FirstExpectedAggregate() =>
-            new InventoryFactory.InventoryBuilder(NintendoUserId)
-                .Build();
+            InventoryFactory.Create(NintendoUserId);
 
         public static List<Event> SecondInputScenario() =>
             new List<Event>
@@ -102,9 +101,8 @@ namespace Inventory.UnitTests.Domain.ModelTests
             };
 
         public static IInventory SecondExpectedAggregate() =>
-            new InventoryFactory.InventoryBuilder(NintendoUserId)
-                .WithManyWeapons(new List<Weapon> { Weapon })
-                .Build();
+            InventoryFactory.Create(NintendoUserId)
+                .AddItem(Weapon);
 
         public static List<Event> ThirdInputScenario() =>
             new List<Event>
@@ -127,9 +125,9 @@ namespace Inventory.UnitTests.Domain.ModelTests
             };
 
         public static IInventory ThirdExpectedAggregate() =>
-            new InventoryFactory.InventoryBuilder(NintendoUserId, InitialMajorVersion + 1)
-                .WithManyWeapons(new List<Weapon> { Weapon })
-                .Build();
+            InventoryFactory.Create(NintendoUserId)
+                .AddItem(Weapon)
+                .Save();
 
         public static List<Event> FourthInputScenario() =>
             new List<Event>
@@ -158,9 +156,9 @@ namespace Inventory.UnitTests.Domain.ModelTests
             };
 
         public static IInventory FourthExpectedAggregate() =>
-            new InventoryFactory.InventoryBuilder(NintendoUserId)
-                .WithManyMaterials(new List<Material> { Material, Material })
-                .Build();
+            InventoryFactory.Create(NintendoUserId)
+                .AddItem(Material)
+                .AddItem(Material);
 
         public static List<Event> FifthInputScenario() =>
             new List<Event>
@@ -194,9 +192,8 @@ namespace Inventory.UnitTests.Domain.ModelTests
             };
 
         public static IInventory FifthExpectedAggregate() =>
-            new InventoryFactory.InventoryBuilder(NintendoUserId)
-                .WithManyMaterials(new List<Material> { Material })
-                .Build();
+            InventoryFactory.Create(NintendoUserId)
+                .AddItem(Material);
 
         public static List<Event> SixthInputScenario() =>
             new List<Event>
@@ -235,8 +232,6 @@ namespace Inventory.UnitTests.Domain.ModelTests
             };
 
         public static IInventory SixthExpectedAggregate() =>
-            new InventoryFactory.InventoryBuilder(NintendoUserId)
-                .WithManyMaterials(new List<Material>())
-                .Build();
+            InventoryFactory.Create(NintendoUserId);
     }
 }

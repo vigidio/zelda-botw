@@ -71,9 +71,11 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var initialShields = this.fixture.CreateMany<Shield>(4);
 
-            var fakeLoadedInventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
-                .WithManyShields(initialShields)
-                .Build();
+            var fakeLoadedInventory = InventoryFactory.Create(Guid.NewGuid());
+            foreach (var initialShield in initialShields)
+            {
+                fakeLoadedInventory.AddItem(initialShield);
+            }
 
             this.inventoryRepositoryMock
                 .Setup(o => o.GetByIdAsync(It.IsAny<string>()))
@@ -111,23 +113,25 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenAShieldSlotWithSomeShields_WhenRemovedAValidItem_ThenShieldRemovedEventShouldOccur()
         {
              // Arrange
-             var initialMaterials = this.fixture.CreateMany<Shield>(4);
+             var initialShields = this.fixture.CreateMany<Shield>(4).ToList();
         
-             var shieldToRemove = initialMaterials.First();
+             var shieldToRemove = initialShields.First();
         
-             var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
-                 .WithManyShields(initialMaterials)
-                 .Build();
+             var inventory = InventoryFactory.Create(Guid.NewGuid());
+             foreach (var initialShield in initialShields)
+             {
+                 inventory.AddItem(initialShield);
+             }
         
              // Assert
-             inventory.GetUncommitted().Should().HaveCount(0);
+             inventory.GetUncommitted().Should().HaveCount(initialShields.Count + 1);
         
              // Act
              inventory.RemoveItem(shieldToRemove);
         
              // Assert
-             inventory.GetUncommitted().Should().HaveCount(1);
-             inventory.GetUncommitted().Last().Version.Should().Be(0);
+             inventory.GetUncommitted().Should().HaveCount(initialShields.Count + 2);
+             inventory.GetUncommitted().Last().Version.Should().Be(initialShields.Count + 1);
              inventory.GetUncommitted().Last().Should().BeOfType<ShieldRemoved>();
              var shieldRemoved = inventory.GetUncommitted().Last() as ShieldRemoved;
              shieldRemoved!.InventoryIdentifier.Should().Be(inventory.InventoryIdentifier);

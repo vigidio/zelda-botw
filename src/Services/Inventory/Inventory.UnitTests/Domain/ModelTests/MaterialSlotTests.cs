@@ -158,9 +158,11 @@ namespace Inventory.UnitTests.Domain.ModelTests
             // Arrange
             var initialMaterials = this.fixture.CreateMany<Material>(160);
 
-            var fakeLoadedInventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
-                .WithManyMaterials(initialMaterials)
-                .Build();
+            var fakeLoadedInventory = InventoryFactory.Create(Guid.NewGuid());
+            foreach (var initialMaterial in initialMaterials)
+            {
+                fakeLoadedInventory.AddItem(initialMaterial);
+            }
 
             this.inventoryRepositoryMock
                 .Setup(o => o.GetByIdAsync(It.IsAny<string>()))
@@ -182,14 +184,16 @@ namespace Inventory.UnitTests.Domain.ModelTests
         {
             // Arrange
             const int initialMaterialsCount = 160;
-            var initialMaterials = this.fixture.CreateMany<Material>(initialMaterialsCount);
+            var initialMaterials = this.fixture.CreateMany<Material>(initialMaterialsCount).ToList();
 
             var materialToRemove = initialMaterials.First();
 
-            var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
-                .WithManyMaterials(initialMaterials)
-                .Build();
-
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
+            foreach (var initialMaterial in initialMaterials)
+            {
+                inventory.AddItem(initialMaterial);
+            }
+            
             // Assert
             inventory.MaterialSlot.SlotBag[materialToRemove.Id].Should().HaveCount(1);
 
@@ -229,9 +233,11 @@ namespace Inventory.UnitTests.Domain.ModelTests
 
             var materialToRemove = initialMaterials.First();
 
-            var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
-                .WithManyMaterials(initialMaterials)
-                .Build();
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
+            foreach (var initialMaterial in initialMaterials)
+            {
+                inventory.AddItem(initialMaterial);
+            }
 
             // Assert
             inventory.MaterialSlot.SlotBag[materialToRemove.Id].Should().HaveCount(2);
@@ -249,23 +255,25 @@ namespace Inventory.UnitTests.Domain.ModelTests
         public void GivenAMaterialSlotWithSomeMaterials_WhenRemovedAValidItem_ThenMaterialRemovedEventShouldOccur()
         {
             // Arrange
-            var initialMaterials = this.fixture.CreateMany<Material>(160);
+            var initialMaterials = this.fixture.CreateMany<Material>(160).ToList();
 
             var materialToRemove = initialMaterials.First();
 
-            var inventory = new InventoryFactory.InventoryBuilder(Guid.NewGuid())
-                .WithManyMaterials(initialMaterials)
-                .Build();
+            var inventory = InventoryFactory.Create(Guid.NewGuid());
+            foreach (var initialMaterial in initialMaterials)
+            {
+                inventory.AddItem(initialMaterial);
+            }
 
             // Assert
-            inventory.GetUncommitted().Should().HaveCount(0);
+            inventory.GetUncommitted().Should().HaveCount(initialMaterials.Count + 1);
 
             // Act
             inventory.RemoveItem(materialToRemove);
 
             // Assert
-            inventory.GetUncommitted().Should().HaveCount(1);
-            inventory.GetUncommitted().Last().Version.Should().Be(0);
+            inventory.GetUncommitted().Should().HaveCount(initialMaterials.Count + 2);
+            inventory.GetUncommitted().Last().Version.Should().Be(initialMaterials.Count + 1);
             inventory.GetUncommitted().Last().Should().BeOfType<MaterialRemoved>();
             var materialRemoved = inventory.GetUncommitted().Last() as MaterialRemoved;
             materialRemoved!.InventoryIdentifier.Should().Be(inventory.InventoryIdentifier);

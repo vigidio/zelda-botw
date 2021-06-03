@@ -91,6 +91,7 @@ namespace Inventory.Domain.Models.AggregateRoot
 
         public IInventory Save()
         {
+            this.MajorVersion++;
             this.ApplyEvent(new GameSaved(this.InventoryIdentifier, this.MajorVersion));
 
             return this;

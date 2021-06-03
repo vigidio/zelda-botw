@@ -19,70 +19,7 @@ namespace Inventory.Domain.Models.AggregateRoot
 
             return newInventory;
         }
-
-        public class InventoryBuilder
-        {
-            private readonly Guid nintendoUserId;
-            private readonly int inventoryMajorVersion;
-            private ISingleSlot<Shield> shieldSlot;
-            private ISingleSlot<Weapon> weaponSlot;
-            private IStackSlot<Material> materialSlot;
-            private ISingleSlot<Weapon> newWeaponSlot;
-
-            public InventoryBuilder(Guid nintendoUserId)
-            {
-                this.nintendoUserId = nintendoUserId;
-            }
-
-            public InventoryBuilder(Guid nintendoUserId, int inventoryMajorVersion)
-                : this(nintendoUserId)
-            {
-                this.inventoryMajorVersion = inventoryMajorVersion;
-            }
-
-            public InventoryBuilder WithManyWeapons(IEnumerable<Weapon> weapons)
-            {
-                this.weaponSlot = new WeaponSlot(weapons);
-
-                return this;
-            }
-
-            public InventoryBuilder WithManyShields(IEnumerable<Shield> shields)
-            {
-                this.shieldSlot = new ShieldSlot(shields);
-
-                return this;
-            }
-
-            public InventoryBuilder WithManyMaterials(IEnumerable<Material> materials)
-            {
-                this.materialSlot = new MaterialSlot(materials);
-
-                return this;
-            }
-
-            public InventoryBuilder WithUncommittedChanges(IEnumerable<Weapon> weapons)
-            {
-                this.newWeaponSlot = new WeaponSlot(weapons);
-
-                return this;
-            }
-
-            public IInventory Build()
-            {
-                var inventory = new InventoryAggregate(
-                        this.nintendoUserId,
-                        this.inventoryMajorVersion,
-                        this.weaponSlot,
-                        this.shieldSlot,
-                        this.materialSlot);
-
-                newWeaponSlot?.SlotBag?.ForEach(i => inventory.AddItem(i));
-
-                return inventory;
-            }
-        }
-
+        
         public class HistoryBuilder
         {
             private readonly List<Event> historyChanges = new List<Event>();
